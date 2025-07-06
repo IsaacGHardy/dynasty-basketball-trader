@@ -1,0 +1,20 @@
+<div class="player-card">
+  <ng-container *ngIf="!player; else playerInfo">
+    <button mat-icon-button class="add-btn">
+      <mat-icon>add</mat-icon>
+    </button>
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search Player</mat-label>
+      <input matInput [(ngModel)]="searchValue" placeholder="Type a name...">
+    </mat-form-field>
+  </ng-container>
+  <ng-template #playerInfo>
+    <div class="player-info">
+      <mat-icon class="player-avatar">person</mat-icon>
+      <div class="player-details">
+        <div class="player-name">{{ player.name }}</div>
+        <div class="player-meta">{{ player.info }}</div>
+      </div>
+    </div>
+  </ng-template>
+</div>

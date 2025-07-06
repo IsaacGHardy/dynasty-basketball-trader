@@ -1,0 +1,46 @@
+.player-card {
+  display: flex;
+  align-items: center;
+  background: #fff3e0;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 1rem;
+  min-width: 320px;
+  min-height: 72px;
+  margin: 0.5rem 0;
+}
+
+.add-btn {
+  margin-right: 1rem;
+  color: #ff9800;
+}
+
+.search-field {
+  flex: 1;
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+}
+
+.player-avatar {
+  font-size: 2.2rem;
+  color: #ff9800;
+  margin-right: 1rem;
+}
+
+.player-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.player-meta {
+  color: #757575;
+  font-size: 0.95rem;
+}
