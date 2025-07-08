@@ -1,18 +1,35 @@
-import { Component, Input } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
+import { Component, Input, ChangeDetectionStrategy, signal } from '@angular/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { DecimalPipe } from '@angular/common';
+import { Player } from '../../../models/player';
 
 @Component({
   selector: 'app-player-card',
   standalone: true,
-  imports: [MatIconModule, MatFormFieldModule, MatInputModule, MatButtonModule, FormsModule],
+  imports: [MatExpansionModule, DecimalPipe],
   templateUrl: './player-card.component.html',
-  styleUrls: ['./player-card.component.css']
+  styleUrls: ['./player-card.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlayerCardComponent {
-  @Input() player: any = null;
-  searchValue: string = '';
-}
+  @Input() player: Player | null = {
+    id: 1,
+    name: 'Nikola Jokic',
+    position: 'C',
+    team: 'Denver Nuggets',
+    age: 29,
+    value: 99,
+    stats: {
+      pts: 26.4,
+      reb: 12.4,
+      ast: 9.0,
+      stl: 1.4,
+      blk: 0.8,
+      threepm: 1.1,
+      fgp: 0.583,
+      ftp: 0.819
+    }
+  };
+
+  readonly isOpen = signal(false);
+};

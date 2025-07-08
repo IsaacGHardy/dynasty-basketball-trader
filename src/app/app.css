@@ -1,0 +1,13 @@
+.layout-container {
+  display: flex;
+  height: 100vh;
+  background: #181818;
+}
+
+main {
+  flex: 1;
+  padding: 2rem;
+  background: #232323;
+  color: #fff;
+  min-width: 0;
+}
