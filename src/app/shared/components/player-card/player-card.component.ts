@@ -1,12 +1,14 @@
-import { Component, Input, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, signal } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DecimalPipe } from '@angular/common';
 import { Player } from '../../../models/player';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-player-card',
   standalone: true,
-  imports: [MatExpansionModule, DecimalPipe],
+  imports: [CommonModule, MatExpansionModule, DecimalPipe, MatIconModule],
   templateUrl: './player-card.component.html',
   styleUrls: ['./player-card.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -30,6 +32,7 @@ export class PlayerCardComponent {
       ftp: 0.819
     }
   };
-
+  @Input() removable = false;
+  @Output() remove = new EventEmitter<void>();
   readonly isOpen = signal(false);
 };

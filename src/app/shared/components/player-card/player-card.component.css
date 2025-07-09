@@ -38,7 +38,7 @@
 
 .header-content {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 2fr;
+  grid-template-columns: 0.05fr 2fr 1fr 2fr 1fr 1fr;
   align-items: center;
   width: 100%;
   gap: 0.5rem;
@@ -104,4 +104,22 @@
   font-size: 0.95rem;
   font-weight: 700;
   text-align: left;
+}
+
+.remove-btn {
+  margin-left: 0.05rem;
+  color: #ff9800;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  align-self: center;
+  transition: color 0.2s;
+}
+
+/* Only the icon color changes on hover, not the background */
+mat-icon:hover,
+.remove-btn:focus {
+  color: #ff3d00;
+  background: transparent;
 }
