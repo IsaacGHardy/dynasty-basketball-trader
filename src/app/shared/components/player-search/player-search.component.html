@@ -1,0 +1,14 @@
+<div class="player-search-container">
+  <mat-form-field appearance="outline" class="player-search-field">
+    <mat-label>Search for a player</mat-label>
+    <input matInput [formControl]="search" [matAutocomplete]="auto" placeholder="Type a name...">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let player of filteredList" [value]="player">
+        <span class="player-search-name">{{ player }}</span>
+      </mat-option>
+      <mat-option *ngIf="filteredList.length === 0" disabled>
+        <span class="player-search-no-results">No players found.</span>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
