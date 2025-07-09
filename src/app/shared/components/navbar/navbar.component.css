@@ -1,3 +1,23 @@
+.navbar-container {
+  position: fixed;
+  top: 0;
+  left: 220px;
+  right: 0;
+  z-index: 1100;
+  width: auto;
+  background: #232323;
+  color: #fff;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  border-bottom: 1px solid #ff9800;
+}
+
+body, main {
+  padding-top: 64px;
+}
+
 .navbar {
   display: flex;
   justify-content: center;

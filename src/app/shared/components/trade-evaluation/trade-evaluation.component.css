@@ -1,0 +1,53 @@
+.evaluation-bar-container {
+  margin: 0.15rem 0 0.15rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.evaluation-bar-bg {
+  position: relative;
+  width: 80%;
+  height: 18px;
+  background: #181818;
+  border: 1.5px solid #888;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.evaluation-bar-fill {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.4s cubic-bezier(.4,0,.2,1);
+  opacity: 0.85;
+}
+
+.evaluation-bar-center {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: #ff9800;
+  transform: translateX(-1px);
+  z-index: 2;
+}
+
+.evaluation-labels {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  font-size: 1rem;
+  color: #bdbdbd;
+}
+
+.evaluation-labels .neutral {
+  color: #ff9800;
+  font-weight: 700;
+}
+
+.evaluation-labels .active {
+  color: #fff;
+  font-weight: 700;
+}
