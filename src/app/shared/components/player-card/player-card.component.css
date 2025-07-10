@@ -81,6 +81,17 @@
   padding-left: 1rem;
 }
 
+.player-rank {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ff9800;
+  text-align: center;
+  width: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .player-details-grid {
   display: grid;
   grid-template-columns: repeat(8, 1fr);

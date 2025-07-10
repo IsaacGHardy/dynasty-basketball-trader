@@ -1,0 +1,68 @@
+.rankings-container {
+  background: #232323;
+  border-radius: 12px;
+  border: 7px solid #ff9800;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  padding: 1.5rem 1rem 1rem 1rem;
+  margin: 2rem auto;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rankings-title {
+  color: #ff9800;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  text-align: center;
+}
+
+.player-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.player-list .header-content {
+  grid-template-columns: 2fr 1fr 2fr 1fr 1fr;
+}
+
+.player-list .player-name {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  text-align: left;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.2rem;
+}
+
+.pagination-controls button {
+  background: #232323;
+  color: #ff9800;
+  border: 2px solid #ff9800;
+  border-radius: 6px;
+  padding: 0.4rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.pagination-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-controls button:not(:disabled):hover {
+  background: #ff9800;
+  color: #232323;
+}

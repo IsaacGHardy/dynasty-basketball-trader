@@ -33,6 +33,7 @@ export class PlayerCardComponent {
     }
   };
   @Input() removable = false;
+  @Input() rank?: number;
   @Output() remove = new EventEmitter<void>();
   readonly isOpen = signal(false);
 };

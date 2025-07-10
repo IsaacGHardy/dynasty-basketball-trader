@@ -1,0 +1,11 @@
+<div class="rankings-container">
+  <h2 class="rankings-title">Player Rankings</h2>
+  <div class="player-list">
+    <app-player-card *ngFor="let player of pagedPlayers(); let i = index" [player]="player" [rank]="page() * pageSize + i + 1"></app-player-card>
+  </div>
+  <div class="pagination-controls">
+    <button (click)="prevPage()" [disabled]="page() === 0">Prev</button>
+    <span>Page {{ page() + 1 }} of {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="page() >= totalPages - 1">Next</button>
+  </div>
+</div>
