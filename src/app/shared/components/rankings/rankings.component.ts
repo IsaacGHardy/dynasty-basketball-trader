@@ -1,8 +1,8 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Player } from '../../../models/player';
 import { PlayerCardComponent } from '../player-card/player-card.component';
-import { PLAYER_LIST } from '../player-search/player-search.component';
+import { Player } from '../../../models/player';
+import { PlayerService } from '../../../services/player.service';
 
 @Component({
   selector: 'app-rankings',
@@ -11,10 +11,20 @@ import { PLAYER_LIST } from '../player-search/player-search.component';
   templateUrl: './rankings.component.html',
   styleUrl: './rankings.component.css',
 })
-export class RankingsComponent {
-  players: Player[] = PLAYER_LIST.slice().sort((a: Player, b: Player) => b.value - a.value);
+export class RankingsComponent implements OnInit {
+  players: Player[] = [];
   pageSize = 7;
   page = signal(0);
+  loading = signal(true);
+
+  constructor(private playerService: PlayerService) {}
+
+  ngOnInit() {
+    this.playerService.getPlayers().subscribe((apiPlayers: Player[]) => {
+      this.players = apiPlayers.sort((a, b) => b.contend_value - a.contend_value);
+      this.loading.set(false);
+    });
+  }
 
   pagedPlayers = computed(() => {
     const start = this.page() * this.pageSize;
@@ -26,9 +36,9 @@ export class RankingsComponent {
   }
 
   nextPage() {
-    if (this.page() < this.totalPages - 1) this.page.update(p => p + 1);
+    if (this.page() < this.totalPages - 1) this.page.update((p) => p + 1);
   }
   prevPage() {
-    if (this.page() > 0) this.page.update(p => p - 1);
+    if (this.page() > 0) this.page.update((p) => p - 1);
   }
 }

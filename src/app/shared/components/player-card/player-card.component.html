@@ -10,18 +10,18 @@
         <span class="player-position">{{ player?.position }}</span>
         <span class="player-info">{{ player?.team }}</span>
         <span class="player-info">Age: {{ player?.age }}</span>
-        <span class="player-value">{{ player?.value | number:'1.0-0' }}</span>
+        <span class="player-value">{{ player?.contend_value | number:'1.0-0' }}</span>
       </div>
     </mat-panel-title>
   </mat-expansion-panel-header>
   <div class="player-details-grid">
-    <span class="stat-label">PTS</span><span class="stat-value">{{player?.stats?.pts}}</span>
-    <span class="stat-label">REB</span><span class="stat-value">{{player?.stats?.reb}}</span>
-    <span class="stat-label">AST</span><span class="stat-value">{{player?.stats?.ast}}</span>
-    <span class="stat-label">STL</span><span class="stat-value">{{player?.stats?.stl}}</span>
-    <span class="stat-label">BLK</span><span class="stat-value">{{player?.stats?.blk}}</span>
-    <span class="stat-label">3PM</span><span class="stat-value">{{player?.stats?.threepm}}</span>
-    <span class="stat-label">FG%</span><span class="stat-value">{{player?.stats?.fgp}}</span>
-    <span class="stat-label">FT%</span><span class="stat-value">{{player?.stats?.ftp}}</span>
+    <span class="stat-label">PTS</span><span class="stat-value">{{player?.pts}}</span>
+    <span class="stat-label">REB</span><span class="stat-value">{{player?.rebs}}</span>
+    <span class="stat-label">AST</span><span class="stat-value">{{player?.ast}}</span>
+    <span class="stat-label">STL</span><span class="stat-value">{{player?.stl}}</span>
+    <span class="stat-label">BLK</span><span class="stat-value">{{player?.blk}}</span>
+    <span class="stat-label">3PM</span><span class="stat-value">{{player?.fg3m}}</span>
+    <span class="stat-label">FG%</span><span class="stat-value">{{ getFgPercent(player) }}</span>
+    <span class="stat-label">FT%</span><span class="stat-value">{{ getFtPercent(player) }}</span>
   </div>
 </mat-expansion-panel>

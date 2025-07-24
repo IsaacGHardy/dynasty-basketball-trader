@@ -33,8 +33,8 @@ export class TradeEvaluationComponent {
   @Input() team2Players: Player[] = [];
 
   get evalPercent(): number {
-    const t1 = this.team1Players.reduce((sum, p) => sum + (p.value || 0), 0);
-    const t2 = this.team2Players.reduce((sum, p) => sum + (p.value || 0), 0);
+    const t1 = this.team1Players.reduce((sum, p) => sum + (p.contend_value || 0), 0);
+    const t2 = this.team2Players.reduce((sum, p) => sum + (p.contend_value || 0), 0);
     if (t1 + t2 === 0) return 50;
     return Math.round(50 + 50 * (t1 - t2) / Math.max(t1 + t2, 1));
   }

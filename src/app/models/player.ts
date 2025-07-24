@@ -1,18 +1,21 @@
 export interface Player {
-    id: number;
+    id: string;
     name: string;
-    position: string;
     team: string;
+    position: string;
+    pts: number;
+    rebs: number;
+    ast: number;
+    blk: number;
+    stl: number;
+    tov: number;
+    fg3m: number;
+    fgm: number;
+    fga: number;
+    ftm: number;
+    fta: number;
+    fantasy_pts: number;
+    contend_value: number;
+    rebuild_value: number;
     age: number;
-    value: number;
-    stats?: {
-        pts?: number;
-        reb?: number;
-        ast?: number;
-        stl?: number;
-        blk?: number;
-        threepm?: number;
-        fgp?: number;
-        ftp?: number;
-    };
 }
