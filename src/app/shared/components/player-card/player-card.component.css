@@ -38,7 +38,7 @@
 
 .header-content {
   display: grid;
-  grid-template-columns: 0.05fr 2fr 1fr 2fr 1fr 1fr;
+  grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 2fr 2fr;
   align-items: center;
   width: 100%;
   gap: 0.5rem;
@@ -74,11 +74,22 @@
 }
 
 .player-value {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: #ff9800;
   justify-self: center;
   padding-left: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.player-fantasy {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color:  #fff;
+  justify-self: center;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  letter-spacing: 0.5px;
 }
 
 .player-rank {

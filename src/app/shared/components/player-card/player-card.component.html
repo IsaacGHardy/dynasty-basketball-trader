@@ -10,7 +10,8 @@
         <span class="player-position">{{ player?.position }}</span>
         <span class="player-info">{{ player?.team }}</span>
         <span class="player-info">Age: {{ player?.age }}</span>
-        <span class="player-value">{{ player?.contend_value | number:'1.0-0' }}</span>
+        <span class="player-fantasy">FantasyPPG: {{player?.fantasy_pts | number:'1.2-2'}}</span>
+        <span class="player-value">{{ value | number:'1.2-2' }}</span>
       </div>
     </mat-panel-title>
   </mat-expansion-panel-header>
@@ -21,7 +22,7 @@
     <span class="stat-label">STL</span><span class="stat-value">{{player?.stl}}</span>
     <span class="stat-label">BLK</span><span class="stat-value">{{player?.blk}}</span>
     <span class="stat-label">3PM</span><span class="stat-value">{{player?.fg3m}}</span>
+    <span class="stat-label">TOV</span><span class="stat-value">{{ player?.tov }}</span>
     <span class="stat-label">FG%</span><span class="stat-value">{{ getFgPercent(player) }}</span>
-    <span class="stat-label">FT%</span><span class="stat-value">{{ getFtPercent(player) }}</span>
   </div>
 </mat-expansion-panel>

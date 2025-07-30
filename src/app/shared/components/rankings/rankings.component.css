@@ -11,12 +11,68 @@
   align-items: center;
 }
 
+
+.rankings-header {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+
 .rankings-title {
   color: #ff9800;
   font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 1.2rem;
-  text-align: center;
+  margin: 0;
+  text-align: left;
+}
+
+.rankings-toggle {
+  background: #232323;
+  border-radius: 8px;
+  border: 2px solid #ff9800;
+  color: #ff9800;
+  font-weight: 600;
+  height: 2.2rem;
+  margin-left: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+.rankings-toggle .mat-button-toggle {
+  color: #ff9800;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  height: 2.2rem;
+}
+
+.rankings-toggle .mat-button-toggle-label-content {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.rankings-toggle .mat-button-toggle-checked {
+  background: #ff9800 !important;
+  color: #232323 !important;
+}
+
+:ng-deep .rankings-toggle .mat-button-toggle-checked .mat-button-toggle-label-content .mat-icon {
+  color: #232323 !important;
+}
+
+:ng-deep .rankings-toggle .mat-button-toggle-checked .mat-button-toggle-label-content .mat-pseudo-checkbox-checked {
+  background: #232323 !important;
+  border-color: #232323 !important;
+}
+
+:ng-deep .rankings-toggle .mat-button-toggle-checked .mat-button-toggle-label-content .mat-pseudo-checkbox {
+  color: #232323 !important;
+  border-color: #232323 !important;
 }
 
 .player-list {

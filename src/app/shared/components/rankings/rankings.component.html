@@ -1,11 +1,33 @@
 <div class="rankings-container">
-  <h2 class="rankings-title">Player Rankings</h2>
-  <div class="player-list">
-    <app-player-card *ngFor="let player of pagedPlayers(); let i = index" [player]="player" [rank]="page() * pageSize + i + 1"></app-player-card>
+  <div class="rankings-header">
+    <h2 class="rankings-title">Player Rankings</h2>
+    <mat-button-toggle-group
+      class="rankings-toggle"
+      [value]="mode()"
+      (change)="onModeChange($event.value)"
+      appearance="legacy"
+      exclusive
+    >
+      <mat-button-toggle value="contender">Contender</mat-button-toggle>
+      <mat-button-toggle value="rebuilder">Rebuilder</mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
-  <div class="pagination-controls">
-    <button (click)="prevPage()" [disabled]="page() === 0">Prev</button>
-    <span>Page {{ page() + 1 }} of {{ totalPages }}</span>
-    <button (click)="nextPage()" [disabled]="page() >= totalPages - 1">Next</button>
+  <div *ngIf="loading(); else playerList" class="loading-indicator">
+    Loading players...
   </div>
+  <ng-template #playerList>
+    <div class="player-list">
+      <app-player-card
+        *ngFor="let player of pagedPlayers(); let i = index"
+        [player]="player"
+        [rank]="page() * pageSize + i + 1"
+        [mode]="mode()"
+      ></app-player-card>
+    </div>
+    <div class="pagination-controls">
+      <button (click)="prevPage()" [disabled]="page() === 0">Prev</button>
+      <span>Page {{ page() + 1 }} of {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="page() >= totalPages - 1">Next</button>
+    </div>
+  </ng-template>
 </div>

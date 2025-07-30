@@ -1,3 +1,8 @@
+:root {
+  --mat-primary: #ff9800;
+  --mat-dark: #232323;
+}
+
 .trade-container {
   background: #232323;
   border-radius: 12px;
@@ -32,11 +37,57 @@
   text-align: left;
 }
 
-
-
 .divider {
   height: 2px;
   background: linear-gradient(90deg, #ff9800 0%, #232323 100%);
   border-radius: 1px;
   margin: 1rem 0;
+}
+
+.team-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+:ng-deep .mat-button-toggle-group {
+  display: flex;
+  justify-content: center;
+}
+
+.team-toggle {
+  background: #232323;
+  border-radius: 8px;
+  border: 2px solid #ff9800;
+  margin-left: 1rem;
+  color: #ff9800;
+  font-weight: 600;
+  height: 2.2rem;
+}
+
+.team-toggle .mat-button-toggle {
+  color: #ff9800;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  height: 2.2rem;
+}
+
+.team-toggle .mat-button-toggle-label-content {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.team-toggle .mat-button-toggle-checked {
+  background: #ff9800 !important;
+  color: #232323 !important;
+}
+
+.team-toggle .mat-button-toggle {
+  vertical-align: middle;
 }

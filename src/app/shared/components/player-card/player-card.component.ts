@@ -37,6 +37,7 @@ export class PlayerCardComponent {
   };
   @Input() removable = false;
   @Input() rank?: number;
+  @Input() mode: 'contender' | 'rebuilder' = 'rebuilder';
   @Output() remove = new EventEmitter<void>();
   readonly isOpen = signal(false);
 
@@ -52,5 +53,10 @@ export class PlayerCardComponent {
       return (player.ftm / player.fta).toFixed(3);
     }
     return 'N/A';
+  }
+
+  get value(): number | null {
+    if (!this.player) return null;
+    return this.mode === 'contender' ? this.player.contend_value : this.player.rebuild_value;
   }
 };
