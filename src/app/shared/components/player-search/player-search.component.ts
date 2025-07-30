@@ -34,7 +34,7 @@ export class PlayerSearchComponent {
     });
     this.search.valueChanges.subscribe(value => {
       this.filteredList = this.playerList.filter(player =>
-        player.name.toLowerCase().includes((value || '').toLowerCase())
+        player?.name?.toLowerCase().includes((value || '').toLowerCase())
       );
     });
   }

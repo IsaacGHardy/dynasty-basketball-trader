@@ -1,8 +1,23 @@
-.evaluation-bar-container {
+.evaluation-bar-container.dual {
   margin: 0.15rem 0 0.15rem 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2.5rem;
+}
+
+.team-bar-group {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.team-bar-label {
+  color: #ff9800;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
 }
 
 .evaluation-bar-bg {
@@ -14,7 +29,23 @@
   overflow: hidden;
   margin-bottom: 0.5rem;
 }
+.evaluation-bar-bg.small {
+  width: 100%;
+  max-width: 20rem;
+  min-width: 8rem;
+  height: 1.2rem;
+  margin-bottom: 0.3rem;
+  box-sizing: border-box;
+}
 
+.team-bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 22rem;
+  min-width: 9rem;
+}
 .evaluation-bar-fill {
   position: absolute;
   top: 0;
@@ -34,20 +65,17 @@
   z-index: 2;
 }
 
-.evaluation-labels {
-  display: flex;
-  justify-content: space-between;
-  width: 80%;
-  font-size: 1rem;
-  color: #bdbdbd;
+.bar-status {
+  font-size: 0.95rem;
+  margin-top: 0.1rem;
+  font-weight: 600;
 }
-
-.evaluation-labels .neutral {
+.bar-status.gain {
+  color: #4caf50;
+}
+.bar-status.loss {
+  color: #f44336;
+}
+.bar-status.neutral {
   color: #ff9800;
-  font-weight: 700;
-}
-
-.evaluation-labels .active {
-  color: #fff;
-  font-weight: 700;
 }

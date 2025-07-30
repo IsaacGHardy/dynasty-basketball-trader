@@ -9,22 +9,36 @@ import { B } from '@angular/cdk/keycodes';
   imports: [CommonModule],
   styleUrls: ['./trade-evaluation.component.css'],
   template: `
-    <div class="evaluation-bar-container">
-      <div class="evaluation-bar-bg">
-        <div
-          class="evaluation-bar-fill"
-          [ngStyle]="{
-            left: evalPercent < 50 ? evalPercent + '%' : '50%',
-            width: evalPercent < 50 ? (50 - evalPercent) + '%' : (evalPercent - 50) + '%',
-            background: '#ff9800'
-          }"
-        ></div>
-        <div class="evaluation-bar-center"></div>
+    <div class="evaluation-bar-container dual">
+      <div class="team-bar-group">
+        <div class="team-bar-label">Team 1</div>
+        <div class="evaluation-bar-bg small">
+          <div
+            class="evaluation-bar-fill"
+            [ngStyle]="{
+              left: team1Bar.left,
+              width: team1Bar.width,
+              background: team1Bar.color
+            }"
+          ></div>
+          <div class="evaluation-bar-center"></div>
+        </div>
+        <div class="bar-status" [ngClass]="team1Bar.statusClass">{{ team1Bar.status }}</div>
       </div>
-      <div class="evaluation-labels">
-        <span [class.active]="evalPercent < 50">Team 1</span>
-        <span class="neutral">{{ tradeStatus }}</span>
-        <span [class.active]="evalPercent > 50">Team 2</span>
+      <div class="team-bar-group">
+        <div class="team-bar-label">Team 2</div>
+        <div class="evaluation-bar-bg small">
+          <div
+            class="evaluation-bar-fill"
+            [ngStyle]="{
+              left: team2Bar.left,
+              width: team2Bar.width,
+              background: team2Bar.color
+            }"
+          ></div>
+          <div class="evaluation-bar-center"></div>
+        </div>
+        <div class="bar-status" [ngClass]="team2Bar.statusClass">{{ team2Bar.status }}</div>
       </div>
     </div>
   `
@@ -41,7 +55,7 @@ export class TradeEvaluationComponent {
     for (let i = 0; i < players.length; i++) {
       let playerValue = (mode === 'contender' ? players[i].contend_value : players[i].rebuild_value) || 0;
       let weight = (100 - (bestAsset - playerValue)) / 100;
-      totalValue += ((playerValue * (weight)));
+      totalValue += ((playerValue * (weight)) ** 2);
     }
     return totalValue;
   }
@@ -54,39 +68,77 @@ export class TradeEvaluationComponent {
     return t1Best > t2Best ? t1Best : t2Best;
   }
 
-  get evalPercent(): number {
-    // Sort team1Players and team2Players by value (contend or rebuild) descending
-    const t1PlayersSorted = [...this.team1Players].sort((a, b) => {
-      const aVal = this.team1Mode === 'contender' ? (a.contend_value || 0) : (a.rebuild_value || 0);
-      const bVal = this.team1Mode === 'contender' ? (b.contend_value || 0) : (b.rebuild_value || 0);
-      return bVal - aVal;
-    });
-    const t2PlayersSorted = [...this.team2Players].sort((a, b) => {
-      const aVal = this.team2Mode === 'contender' ? (a.contend_value || 0) : (a.rebuild_value || 0);
-      const bVal = this.team2Mode === 'contender' ? (b.contend_value || 0) : (b.rebuild_value || 0);
-      return bVal - aVal;
-    });
-
-    const bestAsset = this.calculateBestAsset(t1PlayersSorted, t2PlayersSorted);
-
-    // Modes are swapped because it considers how valuable the incoming players are to the other team
-    const t1 = this.calculateValue(t1PlayersSorted, this.team2Mode, bestAsset);
-    const t2 = this.calculateValue(t2PlayersSorted, this.team1Mode, bestAsset);
-
-    const percent = (t1 - t2) * (100 / (t1 + t2)) + 50;
-
-    return percent;
+  calculateBestAssetOneTeam(incomingPlayers: Player[], outgoingPlayers: Player[], mode: 'contender' | 'rebuilder'): number {
+    let bestAsset = 0;
+    if (mode === 'contender') {
+      bestAsset = Math.max(...incomingPlayers.map(p => p.contend_value || 0), ...outgoingPlayers.map(p => p.contend_value || 0));
+    } else {
+      bestAsset = Math.max(...incomingPlayers.map(p => p.rebuild_value || 0), ...outgoingPlayers.map(p => p.rebuild_value || 0));
+    }
+    return bestAsset;
   }
 
+  evaluateTradeForTeam(incomingPlayers: Player[], outgoingPlayers: Player[], mode: 'contender' | 'rebuilder'): number {
+    const bestAsset = this.calculateBestAssetOneTeam(incomingPlayers, outgoingPlayers, mode);
+
+    const incomingValue = this.calculateValue(incomingPlayers, mode, bestAsset);
+    const outgoingValue = this.calculateValue(outgoingPlayers, mode, bestAsset);
+
+    return (incomingValue - outgoingValue) * (100 / (incomingValue + outgoingValue)) + 50;
+  }
+
+
+  // Team 1: incoming = team2Players, outgoing = team1Players
+  // Team 2: incoming = team1Players, outgoing = team2Players
+  get team1Value(): number {
+    return this.evaluateTradeForTeam(this.team2Players, this.team1Players, this.team1Mode);
+  }
+  get team2Value(): number {
+    return this.evaluateTradeForTeam(this.team1Players, this.team2Players, this.team2Mode);
+  }
+
+  get team1Bar() {
+    return this.getBarProps(this.team1Value);
+  }
+  get team2Bar() {
+    return this.getBarProps(this.team2Value);
+  }
+
+  getBarProps(value: number) {
+    // value is centered at 50, range 0-100
+    let left: string, width: string, color: string, status: string, statusClass: string;
+    const absDelta = Math.abs(value - 50);
+    if (value > 52) {
+      color = '#4caf50';
+      status = absDelta > 20 ? 'Large value gain' : 'Small value gain';
+      statusClass = 'gain';
+      left = '50%';
+      width = (value - 50) + '%';
+    } else if (value < 48) {
+      color = '#f44336';
+      status = absDelta > 20 ? 'Large value loss' : 'Small value loss';
+      statusClass = 'loss';
+      left = value + '%';
+      width = (50 - value) + '%';
+    } else {
+      color = '#ff9800';
+      status = 'Neutral value move';
+      statusClass = 'neutral';
+      left = '48%';
+      width = '4%';
+    }
+    return { left, width, color, status, statusClass };
+  }
+
+  // I want to calculate the value for each team as both teams can win given the contend vs rebuild values
+  // Instead of having one bar, I'd like to have two bars, one for each team
+
   get tradeStatus(): string {
-    const p = this.evalPercent;
-    if (p <= 20) return 'Team 1 HEIST!';
-    if (p <= 40) return 'Team 1 Wins Big';
-    if (p <= 48) return 'Team 1 Wins';
-    if (p < 52)  return 'Fair Deal';
-    if (p < 60)  return 'Team 2 Wins';
-    if (p < 80)  return 'Team 2 Wins Big';
-    if (p >= 80) return 'Team 2 HEIST!';
-    return 'Even Trade';
+    // Example: summarize both teams' value moves
+    const t1 = this.team1Bar.status;
+    const t2 = this.team2Bar.status;
+    if (t1 === 'Neutral value move' && t2 === 'Neutral value move') return 'Both teams: Neutral value move';
+    if (t1 === t2) return `Both teams: ${t1}`;
+    return `Team 1: ${t1} | Team 2: ${t2}`;
   }
 }
