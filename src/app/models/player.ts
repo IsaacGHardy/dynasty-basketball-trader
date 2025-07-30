@@ -18,4 +18,5 @@ export interface Player {
     contend_value: number;
     rebuild_value: number;
     age: number;
+    type: string
 }

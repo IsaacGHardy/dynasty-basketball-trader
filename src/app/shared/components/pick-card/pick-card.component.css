@@ -1,0 +1,106 @@
+.pick-card {
+  background: #232323 !important;
+  color: #fff !important;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  min-width: 340px;
+  margin: 0.65rem 0.2rem;
+  border: 1px solid #2196f3;
+  min-height: 48px;
+  padding: 0.5rem 0.65rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.pick-card:hover {
+  box-shadow: 0 4px 16px rgba(33, 150, 243, 0.25);
+}
+
+.header-content {
+  display: grid;
+  grid-template-columns: 0.5fr 2fr 1fr 1.5fr 1fr 1fr 2fr;
+  align-items: center;
+  width: 100%;
+  gap: 0.5rem;
+  min-height: 32px;
+}
+
+.pick-label {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 2.5rem;
+}
+
+.pick-year {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #2196f3;
+  text-align: center;
+  justify-self: center;
+}
+
+.pick-round {
+  font-size: 1rem;
+  color: #bdbdbd;
+  text-align: center;
+  justify-self: center;
+}
+
+.pick-tier {
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  justify-self: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pick-type {
+  font-size: 1rem;
+  color: #bdbdbd;
+  text-align: center;
+  justify-self: center;
+}
+
+.pick-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2196f3;
+  justify-self: center;
+  padding-left: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.pick-rank {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2196f3;
+  text-align: center;
+  width: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-btn {
+  margin-left: 0.05rem;
+  color: #2196f3;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  align-self: center;
+  transition: color 0.2s;
+}
+
+/* Only the icon color changes on hover, not the background */
+mat-icon:hover,
+.remove-btn:focus {
+  color: #f44336;
+  background: transparent;
+}

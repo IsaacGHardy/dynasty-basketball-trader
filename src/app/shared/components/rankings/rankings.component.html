@@ -1,6 +1,6 @@
 <div class="rankings-container">
   <div class="rankings-header">
-    <h2 class="rankings-title">Player Rankings</h2>
+    <h2 class="rankings-title">Asset Rankings</h2>
     <mat-button-toggle-group
       class="rankings-toggle"
       [value]="mode()"
@@ -12,17 +12,24 @@
       <mat-button-toggle value="rebuilder">Rebuilder</mat-button-toggle>
     </mat-button-toggle-group>
   </div>
-  <div *ngIf="loading(); else playerList" class="loading-indicator">
-    Loading players...
+  <div *ngIf="loading(); else assetList" class="loading-indicator">
+    Loading assets...
   </div>
-  <ng-template #playerList>
+  <ng-template #assetList>
     <div class="player-list">
-      <app-player-card
-        *ngFor="let player of pagedPlayers(); let i = index"
-        [player]="player"
-        [rank]="page() * pageSize + i + 1"
-        [mode]="mode()"
-      ></app-player-card>
+      <ng-container *ngFor="let asset of pagedAssets(); let i = index">
+        <app-player-card
+          *ngIf="isPlayer(asset)"
+          [player]="asset"
+          [rank]="page() * pageSize + i + 1"
+          [mode]="mode()">
+        </app-player-card>
+        <app-pick-card
+          *ngIf="isPick(asset)"
+          [pick]="asset"
+          [rank]="page() * pageSize + i + 1">
+        </app-pick-card>
+      </ng-container>
     </div>
     <div class="pagination-controls">
       <button (click)="prevPage()" [disabled]="page() === 0">Prev</button>

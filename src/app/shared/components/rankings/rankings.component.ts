@@ -3,59 +3,77 @@ import { Component, computed, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { PlayerCardComponent } from '../player-card/player-card.component';
+import { PickCardComponent } from '../pick-card/pick-card.component';
 import { Player } from '../../../models/player';
-import { PlayerService } from '../../../services/player.service';
+import { Pick } from '../../../models/pick';
+import { Asset } from '../../../models/asset';
+import { PlayerService, isPlayer, isPick } from '../../../services/player.service';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-rankings',
   standalone: true,
-  imports: [CommonModule, PlayerCardComponent, MatButtonToggleModule],
+  imports: [CommonModule, PlayerCardComponent, PickCardComponent, MatButtonToggleModule],
   templateUrl: './rankings.component.html',
   styleUrl: './rankings.component.css',
 })
 export class RankingsComponent {
-  allPlayers: Player[] = [];
-  players: Player[] = [];
+  allAssets: Asset[] = [];
+  assets: Asset[] = [];
   pageSize = 7;
   page = signal(0);
   loading = signal(true);
   mode = signal<'contender' | 'rebuilder'>('contender');
 
+  // Make type guards available to template
+  isPlayer = isPlayer;
+  isPick = isPick;
+
   constructor(private playerService: PlayerService) {
     this.playerService.playerData$
       .pipe(takeUntilDestroyed())
-      .subscribe((apiPlayers: Player[]) => {
-        this.allPlayers = apiPlayers;
-        this.sortPlayers();
+      .subscribe((apiAssets: Asset[]) => {
+        this.allAssets = apiAssets;
+        this.sortAssets();
         this.loading.set(false);
       });
   }
 
-  sortPlayers() {
-    this.players = [...this.allPlayers].sort((a, b) =>
-      this.mode() === 'contender'
-        ? (b.contend_value || 0) - (a.contend_value || 0)
-        : (b.rebuild_value || 0) - (a.rebuild_value || 0)
-    );
+  private getAssetValue(asset: Asset, mode: 'contender' | 'rebuilder'): number {
+    if (isPlayer(asset)) {
+      return (mode === 'contender' ? asset.contend_value : asset.rebuild_value) || 0;
+    } else if (isPick(asset)) {
+      return asset.value || 0;
+    }
+    return 0;
+  }
+
+  sortAssets() {
+    this.assets = [...this.allAssets].sort((a, b) => {
+      // Sort by value depending on type and mode
+      const mode = this.mode();
+      const valueA = this.getAssetValue(a, mode);
+      const valueB = this.getAssetValue(b, mode);
+      return valueB - valueA; // Sort descending (highest value first)
+    });
     // If already on page 0, force update by setting to -1 then 0
     let currentPage = this.page();
-      this.page.set(-1);
-      setTimeout(() => this.page.set(currentPage), 0);
+    this.page.set(-1);
+    setTimeout(() => this.page.set(currentPage), 0);
   }
 
   onModeChange(mode: 'contender' | 'rebuilder') {
     this.mode.set(mode);
-    this.sortPlayers();
+    this.sortAssets();
   }
 
-  pagedPlayers = computed(() => {
+  pagedAssets = computed(() => {
     const start = this.page() * this.pageSize;
-    return this.players.slice(start, start + this.pageSize);
+    return this.assets.slice(start, start + this.pageSize);
   });
 
   get totalPages() {
-    return Math.ceil(this.players.length / this.pageSize);
+    return Math.ceil(this.assets.length / this.pageSize);
   }
 
   nextPage() {

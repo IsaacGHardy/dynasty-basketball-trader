@@ -4,9 +4,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
-import { Player } from '../../../models/player';
+import { Asset } from '../../../models/asset';
 import { PlayerService } from '../../../services/player.service';
-import { PlayerCardComponent } from '../player-card/player-card.component';
+import { Player } from '../../../models/player';
+import { Pick } from '../../../models/pick';
 
 @Component({
   selector: 'app-player-search',
@@ -22,10 +23,10 @@ import { PlayerCardComponent } from '../player-card/player-card.component';
   styleUrls: ['./player-search.component.css']
 })
 export class PlayerSearchComponent {
-  @Output() playerSelected = new EventEmitter<Player>();
+  @Output() playerSelected = new EventEmitter<Asset>();
   search: FormControl = new FormControl('');
-  playerList: Player[] = [];
-  filteredList: Player[] = [];
+  playerList: Asset[] = [];
+  filteredList: Asset[] = [];
 
   constructor(private playerService: PlayerService) {
     this.playerService.playerData$.subscribe(players => {
@@ -33,15 +34,29 @@ export class PlayerSearchComponent {
       this.filteredList = [...players];
     });
     this.search.valueChanges.subscribe(value => {
-      const searchValue = typeof value === 'string' ? value : '';
-      this.filteredList = this.playerList.filter(player =>
-        player?.name?.toLowerCase().includes(searchValue.toLowerCase())
-      );
+      const searchValue = typeof value === 'string' ? value.toLowerCase() : '';
+      this.filteredList = this.playerList.filter(asset => {
+        if (asset.type === 'player') {
+          return (asset as Player).name.toLowerCase().includes(searchValue);
+        } else if (asset.type === 'pick') {
+          return (asset as Pick).label.toLowerCase().includes(searchValue);
+        }
+        return false;
+      });
     });
   }
 
-  onOptionSelected(player: Player) {
-    this.playerSelected.emit(player);
+  onOptionSelected(asset: Asset) {
+    this.playerSelected.emit(asset);
     this.search.setValue(''); // Reset the input after selection to prevent [object Object]
+  }
+
+  getDisplayName(asset: Asset): string {
+    if (asset.type === 'player') {
+      return (asset as Player).name;
+    } else if (asset.type === 'pick') {
+      return (asset as Pick).label;
+    }
+    return '';
   }
 }

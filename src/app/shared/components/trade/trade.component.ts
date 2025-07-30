@@ -1,59 +1,35 @@
 import { Component } from '@angular/core';
 import { ScoringService } from '../../../services/scoring.service';
-import { PlayerService } from '../../../services/player.service';
+import { PlayerService, isPlayer, isPick } from '../../../services/player.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { Player } from '../../../models/player';
 import { PlayerSearchComponent } from '../player-search/player-search.component';
 import { PlayerCardComponent } from '../player-card/player-card.component';
+import { PickCardComponent } from '../pick-card/pick-card.component';
 import { TradeEvaluationComponent } from '../trade-evaluation/trade-evaluation.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
+import { Asset } from '../../../models/asset';
 
 @Component({
   selector: 'app-trade',
   standalone: true,
-  imports: [CommonModule, PlayerSearchComponent, PlayerCardComponent, TradeEvaluationComponent, MatButtonToggleModule, FormsModule],
+  imports: [CommonModule, PlayerSearchComponent, PlayerCardComponent, PickCardComponent, TradeEvaluationComponent, MatButtonToggleModule, FormsModule],
   styleUrls: ['./trade.component.css'],
-  template: `
-    <div class="trade-container">
-      <div class="team-section">
-        <div class="team-header">
-          <span class="team-label">Team 1</span>
-          <mat-button-toggle-group class="team-toggle" [(ngModel)]="team1Mode" name="team1Mode" appearance="legacy">
-            <mat-button-toggle value="contender">Contender</mat-button-toggle>
-            <mat-button-toggle value="rebuilder">Rebuilder</mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-        <ng-container *ngFor="let player of team1Players; let i = index">
-          <app-player-card [player]="player" [removable]="true" (remove)="removePlayerFromTeam(1, i)" [mode]="team1Mode" class="trade-player-card"></app-player-card>
-        </ng-container>
-        <app-player-search (playerSelected)="addPlayerToTeam(1, $event)"></app-player-search>
-      </div>
-      <app-trade-evaluation [team1Players]="team1Players" [team2Players]="team2Players" [team1Mode]="team1Mode" [team2Mode]="team2Mode"></app-trade-evaluation>
-      <div class="team-section">
-        <div class="team-header">
-          <span class="team-label">Team 2</span>
-          <mat-button-toggle-group class="team-toggle" [(ngModel)]="team2Mode" name="team2Mode" appearance="legacy">
-            <mat-button-toggle value="contender">Contender</mat-button-toggle>
-            <mat-button-toggle value="rebuilder">Rebuilder</mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-        <ng-container *ngFor="let player of team2Players; let i = index">
-          <app-player-card [player]="player" [removable]="true" (remove)="removePlayerFromTeam(2, i)" [mode]="team2Mode" class="trade-player-card"></app-player-card>
-        </ng-container>
-        <app-player-search (playerSelected)="addPlayerToTeam(2, $event)"></app-player-search>
-      </div>
-    </div>
-  `
+  templateUrl: './trade.component.html'
 })
 
 export class TradeComponent {
-  team1Players: Player[] = [];
-  team2Players: Player[] = [];
+  team1Assets: Asset[] = [];
+  team2Assets: Asset[] = [];
 
   team1Mode: 'contender' | 'rebuilder' = 'contender';
   team2Mode: 'contender' | 'rebuilder' = 'contender';
+
+  // Make type guards available to template
+  isPlayer = isPlayer;
+  isPick = isPick;
 
   constructor(
     private scoringService: ScoringService,
@@ -62,14 +38,14 @@ export class TradeComponent {
     this.scoringService.scoring$
       .pipe(takeUntilDestroyed())
       .subscribe(scoring => {
-        this.playerService.getPlayers(scoring).subscribe((players: Player[]) => {
-          this.updateTeamPlayers(this.team1Players, players);
-          this.updateTeamPlayers(this.team2Players, players);
+        this.playerService.getPlayers(scoring).subscribe((players: Asset[]) => {
+          this.updateTeamPlayers(this.team1Assets, players);
+          this.updateTeamPlayers(this.team2Assets, players);
         });
       });
   }
 
-  private updateTeamPlayers(team: Player[], latestPlayers: Player[]) {
+  private updateTeamPlayers(team: Asset[], latestPlayers: Asset[]) {
     for (let i = 0; i < team.length; i++) {
       const updated = latestPlayers.find(p => p.id === team[i].id);
       if (updated) {
@@ -78,19 +54,19 @@ export class TradeComponent {
     }
   }
 
-  addPlayerToTeam(team: 1 | 2, player: Player) {
+  addPlayerToTeam(team: 1 | 2, asset: Asset) {
     if (team === 1) {
-      this.team1Players.push(player);
+      this.team1Assets.push(asset);
     } else {
-      this.team2Players.push(player);
+      this.team2Assets.push(asset);
     }
   }
 
   removePlayerFromTeam(team: 1 | 2, index: number) {
     if (team === 1) {
-      this.team1Players.splice(index, 1);
+      this.team1Assets.splice(index, 1);
     } else {
-      this.team2Players.splice(index, 1);
+      this.team2Assets.splice(index, 1);
     }
   }
 }

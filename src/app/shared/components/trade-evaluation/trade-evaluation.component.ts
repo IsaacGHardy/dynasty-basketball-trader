@@ -1,100 +1,71 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Player } from '../../../models/player';
-import { B } from '@angular/cdk/keycodes';
+import { Pick } from '../../../models/pick';
+import { Asset } from '../../../models/asset';
+import { isPlayer, isPick } from '../../../services/player.service';
 
 @Component({
   selector: 'app-trade-evaluation',
   standalone: true,
   imports: [CommonModule],
   styleUrls: ['./trade-evaluation.component.css'],
-  template: `
-    <div class="evaluation-bar-container dual">
-      <div class="team-bar-group">
-        <div class="team-bar-label">Team 1</div>
-        <div class="evaluation-bar-bg small">
-          <div
-            class="evaluation-bar-fill"
-            [ngStyle]="{
-              left: team1Bar.left,
-              width: team1Bar.width,
-              background: team1Bar.color
-            }"
-          ></div>
-          <div class="evaluation-bar-center"></div>
-        </div>
-        <div class="bar-status" [ngClass]="team1Bar.statusClass">{{ team1Bar.status }}</div>
-      </div>
-      <div class="team-bar-group">
-        <div class="team-bar-label">Team 2</div>
-        <div class="evaluation-bar-bg small">
-          <div
-            class="evaluation-bar-fill"
-            [ngStyle]="{
-              left: team2Bar.left,
-              width: team2Bar.width,
-              background: team2Bar.color
-            }"
-          ></div>
-          <div class="evaluation-bar-center"></div>
-        </div>
-        <div class="bar-status" [ngClass]="team2Bar.statusClass">{{ team2Bar.status }}</div>
-      </div>
-    </div>
-  `
+  templateUrl: './trade-evaluation.component.html'
 })
+
 export class TradeEvaluationComponent {
-  @Input() team1Players: Player[] = [];
-  @Input() team2Players: Player[] = [];
+  @Input() team1Assets!: Asset[];
+  @Input() team2Assets!: Asset[];
   @Input() team1Mode: 'contender' | 'rebuilder' = 'contender';
   @Input() team2Mode: 'contender' | 'rebuilder' = 'contender';
 
-  calculateValue(players: Player[], mode: 'contender' | 'rebuilder', bestAsset: number): number {
-    if(players.length === 0) return 0;
+  // Helper function to get value from any asset type
+  private getAssetValue(asset: Asset, mode: 'contender' | 'rebuilder'): number {
+    if (isPlayer(asset)) {
+      return (mode === 'contender' ? asset.contend_value : asset.rebuild_value) || 0;
+    } else if (isPick(asset)) {
+      return asset.value || 0;
+    }
+    return 0;
+  }
+
+  calculateValue(assets: Asset[], mode: 'contender' | 'rebuilder', bestAsset: number): number {
+    if(!assets || assets.length === 0) return 0;
     let totalValue = 0;
-    for (let i = 0; i < players.length; i++) {
-      let playerValue = (mode === 'contender' ? players[i].contend_value : players[i].rebuild_value) || 0;
-      let weight = (100 - (bestAsset - playerValue)) / 100;
-      totalValue += ((playerValue * (weight)) ** 2);
+    for (let i = 0; i < assets.length; i++) {
+      let assetValue = this.getAssetValue(assets[i], mode);
+      let weight = (100 - (bestAsset - assetValue)) / 100;
+      totalValue += ((assetValue * (weight)) ** 2);
     }
     return totalValue;
   }
 
-  calculateBestAsset(t1PlayersSorted: Player[], t2PlayersSorted: Player[]): number {
-    let t1Best: number = 0;
-    let t2Best: number = 0;
-    if(t1PlayersSorted.length !=0) t1Best = this.team2Mode === 'contender' ? t1PlayersSorted[0].contend_value : t1PlayersSorted[0].rebuild_value;
-    if(t2PlayersSorted.length !=0) t2Best = this.team1Mode === 'contender' ? t2PlayersSorted[0].contend_value : t2PlayersSorted[0].rebuild_value;
-    return t1Best > t2Best ? t1Best : t2Best;
-  }
-
-  calculateBestAssetOneTeam(incomingPlayers: Player[], outgoingPlayers: Player[], mode: 'contender' | 'rebuilder'): number {
+  calculateBestAssetOneTeam(incomingAssets: Asset[], outgoingAssets: Asset[], mode: 'contender' | 'rebuilder'): number {
     let bestAsset = 0;
-    if (mode === 'contender') {
-      bestAsset = Math.max(...incomingPlayers.map(p => p.contend_value || 0), ...outgoingPlayers.map(p => p.contend_value || 0));
-    } else {
-      bestAsset = Math.max(...incomingPlayers.map(p => p.rebuild_value || 0), ...outgoingPlayers.map(p => p.rebuild_value || 0));
+    const allAssets = [...(incomingAssets || []), ...(outgoingAssets || [])];
+    if (allAssets.length > 0) {
+      bestAsset = Math.max(...allAssets.map(asset => this.getAssetValue(asset, mode)));
     }
     return bestAsset;
   }
 
-  evaluateTradeForTeam(incomingPlayers: Player[], outgoingPlayers: Player[], mode: 'contender' | 'rebuilder'): number {
-    const bestAsset = this.calculateBestAssetOneTeam(incomingPlayers, outgoingPlayers, mode);
+  evaluateTradeForTeam(incomingAssets: Asset[], outgoingAssets: Asset[], mode: 'contender' | 'rebuilder'): number {
+    const bestAsset = this.calculateBestAssetOneTeam(incomingAssets, outgoingAssets, mode);
 
-    const incomingValue = this.calculateValue(incomingPlayers, mode, bestAsset);
-    const outgoingValue = this.calculateValue(outgoingPlayers, mode, bestAsset);
+    const incomingValue = this.calculateValue(incomingAssets, mode, bestAsset);
+    const outgoingValue = this.calculateValue(outgoingAssets, mode, bestAsset);
 
     return (incomingValue - outgoingValue) * (100 / (incomingValue + outgoingValue)) + 50;
   }
 
 
-  // Team 1: incoming = team2Players, outgoing = team1Players
-  // Team 2: incoming = team1Players, outgoing = team2Players
+  // Team 1: incoming = team2Assets, outgoing = team1Assets
+  // Team 2: incoming = team1Assets, outgoing = team2Assets
   get team1Value(): number {
-    return this.evaluateTradeForTeam(this.team2Players, this.team1Players, this.team1Mode);
+    return this.evaluateTradeForTeam(this.team2Assets || [], this.team1Assets || [], this.team1Mode);
   }
   get team2Value(): number {
-    return this.evaluateTradeForTeam(this.team1Players, this.team2Players, this.team2Mode);
+    return this.evaluateTradeForTeam(this.team1Assets || [], this.team2Assets || [], this.team2Mode);
   }
 
   get team1Bar() {

@@ -14,27 +14,7 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlayerCardComponent {
-  @Input() player: Player | null = {
-    id: '1',
-    name: 'Nikola Jokic',
-    position: 'C',
-    team: 'Denver Nuggets',
-    age: 29,
-    pts: 26.4,
-    rebs: 12.4,
-    ast: 9.0,
-    stl: 1.4,
-    blk: 0.8,
-    tov: 3.2,
-    fg3m: 1.1,
-    fgm: 10.2,
-    fga: 17.5,
-    ftm: 5.1,
-    fta: 6.2,
-    fantasy_pts: 60.2,
-    contend_value: 99,
-    rebuild_value: 99,
-  };
+  @Input() player: Player | null = null;
   @Input() removable = false;
   @Input() rank?: number;
   @Input() mode: 'contender' | 'rebuilder' = 'rebuilder';
