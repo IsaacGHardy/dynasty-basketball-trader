@@ -28,13 +28,14 @@ export class PlayerSearchComponent {
   filteredList: Player[] = [];
 
   constructor(private playerService: PlayerService) {
-    this.playerService.getPlayers().subscribe(players => {
+    this.playerService.playerData$.subscribe(players => {
       this.playerList = players;
       this.filteredList = [...players];
     });
     this.search.valueChanges.subscribe(value => {
+      const searchValue = typeof value === 'string' ? value : '';
       this.filteredList = this.playerList.filter(player =>
-        player?.name?.toLowerCase().includes((value || '').toLowerCase())
+        player?.name?.toLowerCase().includes(searchValue.toLowerCase())
       );
     });
   }

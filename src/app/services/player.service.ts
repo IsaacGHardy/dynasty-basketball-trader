@@ -2,7 +2,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
+import { switchMap, shareReplay } from 'rxjs/operators';
+import { ScoringService } from './scoring.service';
 
 export interface ApiPlayer {
   id: string;
@@ -28,15 +29,20 @@ export interface ApiPlayer {
 
 @Injectable({ providedIn: 'root' })
 export class PlayerService {
-  private apiUrl = 'http://127.0.0.1:8000/players?scoring=sleeper';
-  private players$?: Observable<ApiPlayer[]>;
+  private baseUrl = 'http://127.0.0.1:8000/players';
 
-  constructor(private http: HttpClient) {}
 
-  getPlayers(): Observable<ApiPlayer[]> {
-    if (!this.players$) {
-      this.players$ = this.http.get<ApiPlayer[]>(this.apiUrl).pipe(shareReplay(1));
-    }
-    return this.players$;
+  playerData$: Observable<ApiPlayer[]>;
+
+  constructor(private http: HttpClient, private scoringService: ScoringService) {
+    this.playerData$ = this.scoringService.scoring$.pipe(
+      switchMap(scoring => this.http.get<ApiPlayer[]>(`${this.baseUrl}?scoring=${scoring}`)),
+      shareReplay(1)
+    );
+  }
+
+  // Optionally, keep a method for one-off fetches
+  getPlayers(scoring: 'sleeper' | 'espn'): Observable<ApiPlayer[]> {
+    return this.http.get<ApiPlayer[]>(`${this.baseUrl}?scoring=${scoring}`);
   }
 }

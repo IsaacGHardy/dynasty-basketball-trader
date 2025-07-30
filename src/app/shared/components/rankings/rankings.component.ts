@@ -1,5 +1,6 @@
 
-import { Component, computed, signal, OnInit } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { PlayerCardComponent } from '../player-card/player-card.component';
 import { Player } from '../../../models/player';
@@ -13,7 +14,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
   templateUrl: './rankings.component.html',
   styleUrl: './rankings.component.css',
 })
-export class RankingsComponent implements OnInit {
+export class RankingsComponent {
   allPlayers: Player[] = [];
   players: Player[] = [];
   pageSize = 7;
@@ -21,14 +22,14 @@ export class RankingsComponent implements OnInit {
   loading = signal(true);
   mode = signal<'contender' | 'rebuilder'>('contender');
 
-  constructor(private playerService: PlayerService) {}
-
-  ngOnInit() {
-    this.playerService.getPlayers().subscribe((apiPlayers: Player[]) => {
-      this.allPlayers = apiPlayers;
-      this.sortPlayers();
-      this.loading.set(false);
-    });
+  constructor(private playerService: PlayerService) {
+    this.playerService.playerData$
+      .pipe(takeUntilDestroyed())
+      .subscribe((apiPlayers: Player[]) => {
+        this.allPlayers = apiPlayers;
+        this.sortPlayers();
+        this.loading.set(false);
+      });
   }
 
   sortPlayers() {

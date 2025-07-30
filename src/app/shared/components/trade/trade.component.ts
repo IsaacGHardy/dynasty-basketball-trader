@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { ScoringService } from '../../../services/scoring.service';
+import { PlayerService } from '../../../services/player.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { Player } from '../../../models/player';
 import { PlayerSearchComponent } from '../player-search/player-search.component';
@@ -44,12 +47,36 @@ import { FormsModule } from '@angular/forms';
     </div>
   `
 })
+
 export class TradeComponent {
   team1Players: Player[] = [];
   team2Players: Player[] = [];
 
   team1Mode: 'contender' | 'rebuilder' = 'contender';
   team2Mode: 'contender' | 'rebuilder' = 'contender';
+
+  constructor(
+    private scoringService: ScoringService,
+    private playerService: PlayerService
+  ) {
+    this.scoringService.scoring$
+      .pipe(takeUntilDestroyed())
+      .subscribe(scoring => {
+        this.playerService.getPlayers(scoring).subscribe((players: Player[]) => {
+          this.updateTeamPlayers(this.team1Players, players);
+          this.updateTeamPlayers(this.team2Players, players);
+        });
+      });
+  }
+
+  private updateTeamPlayers(team: Player[], latestPlayers: Player[]) {
+    for (let i = 0; i < team.length; i++) {
+      const updated = latestPlayers.find(p => p.id === team[i].id);
+      if (updated) {
+        team[i] = { ...updated };
+      }
+    }
+  }
 
   addPlayerToTeam(team: 1 | 2, player: Player) {
     if (team === 1) {
