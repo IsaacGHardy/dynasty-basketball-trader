@@ -1,8 +1,21 @@
 import { Routes } from '@angular/router';
-import { TradeComponent } from './shared/components/trade/trade.component';
 
 export const routes: Routes = [
-  { path: 'trade', component: TradeComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  {
+    path: 'home',
+    loadComponent: () =>
+      import('./shared/components/home/home.component').then(
+        (m) => m.HomeComponent
+      ),
+  },
+  {
+    path: 'trade',
+    loadComponent: () =>
+      import('./shared/components/trade/trade.component').then(
+        (m) => m.TradeComponent
+      ),
+  },
   {
     path: 'rankings',
     loadComponent: () =>

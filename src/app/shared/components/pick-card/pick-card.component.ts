@@ -2,12 +2,13 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from 
 import { DecimalPipe } from '@angular/common';
 import { Pick } from '../../../models/pick';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-pick-card',
   standalone: true,
-  imports: [CommonModule, DecimalPipe, MatIconModule],
+  imports: [CommonModule, DecimalPipe, MatIconModule, MatTooltipModule],
   templateUrl: './pick-card.component.html',
   styleUrls: ['./pick-card.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush

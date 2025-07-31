@@ -17,11 +17,11 @@ import { isPlayer, isPick } from '../../../services/player.service';
     </ng-container>
     <ng-template #card>
       <app-player-card 
-        *ngIf="isPlayer(selectedAsset)" 
+        *ngIf="selectedAsset && isPlayer(selectedAsset)" 
         [player]="selectedAsset">
       </app-player-card>
       <app-pick-card 
-        *ngIf="isPick(selectedAsset)" 
+        *ngIf="selectedAsset && isPick(selectedAsset)" 
         [pick]="selectedAsset">
       </app-pick-card>
     </ng-template>

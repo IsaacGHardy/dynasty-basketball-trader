@@ -1,7 +1,7 @@
 <div class="player-search-container">
   <mat-form-field appearance="outline" class="player-search-field">
     <mat-label>Search for a player or pick</mat-label>
-    <input matInput [formControl]="search" [matAutocomplete]="auto" placeholder="Type a name or pick...">
+    <input matInput [formControl]="search" [matAutocomplete]="auto" placeholder="Type a name or pick..." (blur)="onInputBlur()">
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event.option.value)">
       <mat-option *ngFor="let asset of filteredList" [value]="asset">
         <span class="player-search-name">{{ getDisplayName(asset) }}</span>

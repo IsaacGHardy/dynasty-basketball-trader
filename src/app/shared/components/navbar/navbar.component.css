@@ -8,7 +8,7 @@
   margin-left: 1.5rem;
   color: #ff9800;
   font-weight: 600;
-  height: 2.2rem;
+  height: 2.8rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.10);
   display: flex;
   align-items: center;
@@ -22,7 +22,7 @@
   transition: background 0.2s, color 0.2s;
   display: flex;
   align-items: center;
-  height: 2.2rem;
+  height: 2.8rem;
   min-width: 60px;
   justify-content: center;
 }
@@ -42,7 +42,7 @@
 .navbar-container {
   position: fixed;
   top: 0;
-  left: 220px;
+  left: 0;
   right: 0;
   z-index: 1100;
   display: flex;
@@ -54,13 +54,67 @@
 .navbar {
   background: linear-gradient(90deg, #000000 0%, #232323 100%);
   color:#ff9800 !important;
+  height: 80px;
+  min-height: 80px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+}
+
+.navbar mat-toolbar-row {
+  height: 80px;
+  min-height: 80px;
 }
 
 .navbar-title {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: bold;
   letter-spacing: 0.5px;
   margin-left: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 2rem;
+}
+
+.navbar-nav a {
+  color: #ff9800 !important;
+  font-weight: 500 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+  min-height: 40px !important;
+}
+
+.navbar-nav a:hover {
+  background: rgba(255, 152, 0, 0.1) !important;
+  color: #ffb74d !important;
+}
+
+.navbar-nav a.active {
+  background: #ff9800 !important;
+  color: #232323 !important;
+}
+
+.navbar-nav a.active mat-icon {
+  color: #232323 !important;
+}
+
+.navbar-nav mat-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
 .spacer {

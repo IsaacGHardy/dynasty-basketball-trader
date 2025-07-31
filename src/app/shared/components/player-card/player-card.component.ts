@@ -3,12 +3,13 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { DecimalPipe } from '@angular/common';
 import { Player } from '../../../models/player';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-player-card',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule, DecimalPipe, MatIconModule],
+  imports: [CommonModule, MatExpansionModule, DecimalPipe, MatIconModule, MatTooltipModule],
   templateUrl: './player-card.component.html',
   styleUrls: ['./player-card.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -11,15 +11,14 @@ body {
 }
 
 .layout-container {
-  display: flex;
   min-height: 100vh;
   background: #181818;
+  padding-top: 80px; /* Account for fixed navbar height */
 }
 
 main {
-  flex: 1;
   padding: 2rem;
-  background: #232323;
+  background: #181818;
   color: #fff;
   min-width: 0;
 }

@@ -51,6 +51,11 @@ export class PlayerSearchComponent {
     this.search.setValue(''); // Reset the input after selection to prevent [object Object]
   }
 
+  onInputBlur() {
+    // Clear the search input when user clicks outside (loses focus)
+    this.search.setValue('');
+  }
+
   getDisplayName(asset: Asset): string {
     if (asset.type === 'player') {
       return (asset as Player).name;

@@ -9,13 +9,14 @@ import { PlayerCardComponent } from '../player-card/player-card.component';
 import { PickCardComponent } from '../pick-card/pick-card.component';
 import { TradeEvaluationComponent } from '../trade-evaluation/trade-evaluation.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { Asset } from '../../../models/asset';
 
 @Component({
   selector: 'app-trade',
   standalone: true,
-  imports: [CommonModule, PlayerSearchComponent, PlayerCardComponent, PickCardComponent, TradeEvaluationComponent, MatButtonToggleModule, FormsModule],
+  imports: [CommonModule, PlayerSearchComponent, PlayerCardComponent, PickCardComponent, TradeEvaluationComponent, MatButtonToggleModule, MatTooltipModule, FormsModule],
   styleUrls: ['./trade.component.css'],
   templateUrl: './trade.component.html'
 })

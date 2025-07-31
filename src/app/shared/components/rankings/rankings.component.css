@@ -58,6 +58,7 @@
   box-shadow: 0 2px 12px rgba(0,0,0,0.18);
   padding: 1.5rem 1rem 1rem 1rem;
   margin: 2rem auto;
+  max-width: 1000px;
   width: auto;
   display: flex;
   flex-direction: column;
@@ -131,7 +132,7 @@
 .player-list {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
 }
 

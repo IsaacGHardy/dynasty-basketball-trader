@@ -9,6 +9,7 @@
   min-height: 48px;
   transition: box-shadow 0.2s ease;
   overflow: hidden;
+  cursor: default;
 }
 
 .pick-card:hover {
@@ -38,6 +39,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: center;
+  cursor: default;
 }
 
 .pick-value {
@@ -47,6 +49,7 @@
   justify-self: center;
   padding-right: 35px;
   letter-spacing: 0.5px;
+  cursor: default;
 }
 
 .pick-rank {
@@ -58,6 +61,7 @@
   display: flex;
   align-items: center;
   justify-content: right;
+  cursor: default;
 }
 
 .remove-btn {

@@ -13,15 +13,16 @@
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   width: fit-content;
-  margin: 0 auto 0 0;
-  margin-right: 200px;
+  margin: 2rem auto;
   align-items: start;
+  cursor: default;
 }
 
 .team-with-evaluation {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  cursor: default;
 }
 
 .team-section {
@@ -36,6 +37,7 @@
   gap: 0.05rem;
   width: fit-content;
   min-width: 440px;
+  cursor: default;
 }
 
 .team-label {
@@ -44,6 +46,7 @@
   font-weight: 700;
   margin-bottom: 0.5rem;
   text-align: left;
+  cursor: default;
 }
 
 .divider {
@@ -58,6 +61,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 0.5rem;
+  cursor: default;
 }
 
 :ng-deep .mat-button-toggle-group {

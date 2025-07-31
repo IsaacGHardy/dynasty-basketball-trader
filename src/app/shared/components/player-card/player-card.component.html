@@ -7,15 +7,15 @@
           <mat-icon>close</mat-icon>
         </button>
         <span class="player-name">{{ player?.name }}</span>
-        <span class="player-value">{{ value | number:'1.2-2' }}</span>
+        <span class="player-value" matTooltip="Value relative to other assets" matTooltipShowDelay="500">{{ value | number:'1.2-2' }}</span>
       </div>
     </mat-panel-title>
   </mat-expansion-panel-header>
   <div class="player-details-grid">
+    <span class="stat-label highlight">FPPG</span><span class="stat-value highlight">{{player?.fantasy_pts | number:'1.2-2'}}</span>
+    <span class="stat-label highlight">Age</span><span class="stat-value highlight">{{player?.age}}</span>
+    <span class="stat-label highlight">Position</span><span class="stat-value highlight">{{player?.position}}</span>
     <span class="stat-label">Team</span><span class="stat-value">{{player?.team}}</span>
-    <span class="stat-label">Position</span><span class="stat-value">{{player?.position}}</span>
-    <span class="stat-label">Age</span><span class="stat-value">{{player?.age}}</span>
-    <span class="stat-label">FPPG</span><span class="stat-value">{{player?.fantasy_pts | number:'1.2-2'}}</span>
     <span class="stat-label">PTS</span><span class="stat-value">{{player?.pts}}</span>
     <span class="stat-label">REB</span><span class="stat-value">{{player?.rebs}}</span>
     <span class="stat-label">AST</span><span class="stat-value">{{player?.ast}}</span>

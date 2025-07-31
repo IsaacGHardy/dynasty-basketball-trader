@@ -5,6 +5,6 @@
       <mat-icon>close</mat-icon>
     </button>
     <span class="pick-label">{{ pick?.label }}</span>
-    <span class="pick-value">{{ pick?.value | number:'1.2-2' }}</span>
+    <span class="pick-value" matTooltip="Value relative to other assets" matTooltipShowDelay="500">{{ pick?.value | number:'1.2-2' }}</span>
   </div>
 </div>

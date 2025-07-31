@@ -1,6 +1,22 @@
 <mat-toolbar class="navbar mat-elevation-z1">
   <mat-toolbar-row>
-    <span class="navbar-title">Dynasty Basketball Trade Evaluator</span>
+    <span class="navbar-title">Dynasty Basketball Trader</span>
+    
+    <nav class="navbar-nav">
+      <a mat-button routerLink="/home" routerLinkActive="active">
+        <mat-icon>home</mat-icon>
+        Home
+      </a>
+      <a mat-button routerLink="/trade" routerLinkActive="active">
+        <mat-icon>swap_horiz</mat-icon>
+        Trades
+      </a>
+      <a mat-button routerLink="/rankings" routerLinkActive="active">
+        <mat-icon>leaderboard</mat-icon>
+        Rankings
+      </a>
+    </nav>
+    
     <span class="spacer"></span>
     <mat-button-toggle-group
       class="navbar-scoring-toggle"
