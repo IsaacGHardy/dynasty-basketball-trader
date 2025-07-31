@@ -7,6 +7,14 @@
   gap: 2.5rem;
 }
 
+.evaluation-bar-container.single {
+  margin: 0.15rem 0 0.15rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .team-bar-group {
   display: flex;
   flex-direction: column;

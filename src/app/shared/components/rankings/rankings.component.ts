@@ -20,7 +20,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 export class RankingsComponent {
   allAssets: Asset[] = [];
   assets: Asset[] = [];
-  pageSize = 7;
+  pageSize = 15;
   page = signal(0);
   loading = signal(true);
   mode = signal<'contender' | 'rebuilder'>('contender');
@@ -69,7 +69,30 @@ export class RankingsComponent {
 
   pagedAssets = computed(() => {
     const start = this.page() * this.pageSize;
-    return this.assets.slice(start, start + this.pageSize);
+    const pageAssets = this.assets.slice(start, start + this.pageSize);
+    
+    // Create array with assets and their original ranks
+    const assetsWithRanks = pageAssets.map((asset, index) => ({
+      asset,
+      rank: start + index + 1
+    }));
+    
+    // Reorganize to fill columns vertically (column-first order)
+    const columns = 3;
+    const itemsPerColumn = Math.ceil(assetsWithRanks.length / columns);
+    const reorderedAssets: {asset: Asset, rank: number}[] = [];
+    
+    // Fill each column completely before moving to the next
+    for (let row = 0; row < itemsPerColumn; row++) {
+      for (let col = 0; col < columns; col++) {
+        const originalIndex = col * itemsPerColumn + row;
+        if (originalIndex < assetsWithRanks.length) {
+          reorderedAssets.push(assetsWithRanks[originalIndex]);
+        }
+      }
+    }
+    
+    return reorderedAssets;
   });
 
   get totalPages() {

@@ -1,6 +1,6 @@
 <div class="rankings-container">
   <div class="rankings-header">
-    <h2 class="rankings-title">Asset Rankings</h2>
+    <h2 class="rankings-title">Rankings</h2>
     <mat-button-toggle-group
       class="rankings-toggle"
       [value]="mode()"
@@ -17,17 +17,17 @@
   </div>
   <ng-template #assetList>
     <div class="player-list">
-      <ng-container *ngFor="let asset of pagedAssets(); let i = index">
+      <ng-container *ngFor="let item of pagedAssets(); let i = index">
         <app-player-card
-          *ngIf="isPlayer(asset)"
-          [player]="asset"
-          [rank]="page() * pageSize + i + 1"
+          *ngIf="isPlayer(item.asset)"
+          [player]="item.asset"
+          [rank]="item.rank"
           [mode]="mode()">
         </app-player-card>
         <app-pick-card
-          *ngIf="isPick(asset)"
-          [pick]="asset"
-          [rank]="page() * pageSize + i + 1">
+          *ngIf="isPick(item.asset)"
+          [pick]="item.asset"
+          [rank]="item.rank">
         </app-pick-card>
       </ng-container>
     </div>

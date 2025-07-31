@@ -1,32 +1,32 @@
-<div class="evaluation-bar-container dual">
-      <div class="team-bar-group">
-        <div class="team-bar-label">Team 1</div>
-        <div class="evaluation-bar-bg small">
-          <div
-            class="evaluation-bar-fill"
-            [ngStyle]="{
-              left: team1Bar.left,
-              width: team1Bar.width,
-              background: team1Bar.color
-            }"
-          ></div>
-          <div class="evaluation-bar-center"></div>
-        </div>
-        <div class="bar-status" [ngClass]="team1Bar.statusClass">{{ team1Bar.status }}</div>
-      </div>
-      <div class="team-bar-group">
-        <div class="team-bar-label">Team 2</div>
-        <div class="evaluation-bar-bg small">
-          <div
-            class="evaluation-bar-fill"
-            [ngStyle]="{
-              left: team2Bar.left,
-              width: team2Bar.width,
-              background: team2Bar.color
-            }"
-          ></div>
-          <div class="evaluation-bar-center"></div>
-        </div>
-        <div class="bar-status" [ngClass]="team2Bar.statusClass">{{ team2Bar.status }}</div>
-      </div>
+<div class="evaluation-bar-container" [ngClass]="{'dual': !showTeam, 'single': showTeam}">
+  <div class="team-bar-group" *ngIf="!showTeam || showTeam === 1">
+    <div class="team-bar-label">Team 1</div>
+    <div class="evaluation-bar-bg small">
+      <div
+        class="evaluation-bar-fill"
+        [ngStyle]="{
+          left: team1Bar.left,
+          width: team1Bar.width,
+          background: team1Bar.color
+        }"
+      ></div>
+      <div class="evaluation-bar-center"></div>
     </div>
+    <div class="bar-status" [ngClass]="team1Bar.statusClass">{{ team1Bar.status }}</div>
+  </div>
+  <div class="team-bar-group" *ngIf="!showTeam || showTeam === 2">
+    <div class="team-bar-label">Team 2</div>
+    <div class="evaluation-bar-bg small">
+      <div
+        class="evaluation-bar-fill"
+        [ngStyle]="{
+          left: team2Bar.left,
+          width: team2Bar.width,
+          background: team2Bar.color
+        }"
+      ></div>
+      <div class="evaluation-bar-center"></div>
+    </div>
+    <div class="bar-status" [ngClass]="team2Bar.statusClass">{{ team2Bar.status }}</div>
+  </div>
+</div>

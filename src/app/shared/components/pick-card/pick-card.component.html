@@ -5,10 +5,6 @@
       <mat-icon>close</mat-icon>
     </button>
     <span class="pick-label">{{ pick?.label }}</span>
-    <span class="pick-year">{{ pick?.year }}</span>
-    <span class="pick-round">{{ getPickDisplay() }}</span>
-    <span class="pick-tier" [style.color]="getTierColor()">{{ pick?.tier }}</span>
-    <span class="pick-type">{{ pick?.type }}</span>
     <span class="pick-value">{{ pick?.value | number:'1.2-2' }}</span>
   </div>
 </div>

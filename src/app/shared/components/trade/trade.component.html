@@ -1,57 +1,75 @@
 <div class="trade-container">
-      <div class="team-section">
-        <div class="team-header">
-          <span class="team-label">Team 1</span>
-          <mat-button-toggle-group class="team-toggle" [(ngModel)]="team1Mode" name="team1Mode" appearance="legacy">
-            <mat-button-toggle value="contender">Contender</mat-button-toggle>
-            <mat-button-toggle value="rebuilder">Rebuilder</mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-        <ng-container *ngFor="let asset of team1Assets; let i = index">
-          <app-player-card 
-            *ngIf="isPlayer(asset)" 
-            [player]="asset" 
-            [removable]="true" 
-            (remove)="removePlayerFromTeam(1, i)" 
-            [mode]="team1Mode" 
-            class="trade-player-card">
-          </app-player-card>
-          <app-pick-card 
-            *ngIf="isPick(asset)" 
-            [pick]="asset" 
-            [removable]="true" 
-            (remove)="removePlayerFromTeam(1, i)" 
-            class="trade-player-card">
-          </app-pick-card>
-        </ng-container>
-        <app-player-search (playerSelected)="addPlayerToTeam(1, $event)"></app-player-search>
+  <div class="team-with-evaluation">
+    <div class="team-section">
+      <div class="team-header">
+        <span class="team-label">Team 1</span>
+        <mat-button-toggle-group class="team-toggle" [(ngModel)]="team1Mode" name="team1Mode" appearance="legacy">
+          <mat-button-toggle value="contender">Contender</mat-button-toggle>
+          <mat-button-toggle value="rebuilder">Rebuilder</mat-button-toggle>
+        </mat-button-toggle-group>
       </div>
-      <app-trade-evaluation [team1Assets]="team1Assets" [team2Assets]="team2Assets" [team1Mode]="team1Mode" [team2Mode]="team2Mode"></app-trade-evaluation>
-      <div class="team-section">
-        <div class="team-header">
-          <span class="team-label">Team 2</span>
-          <mat-button-toggle-group class="team-toggle" [(ngModel)]="team2Mode" name="team2Mode" appearance="legacy">
-            <mat-button-toggle value="contender">Contender</mat-button-toggle>
-            <mat-button-toggle value="rebuilder">Rebuilder</mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-        <ng-container *ngFor="let asset of team2Assets; let i = index">
-          <app-player-card 
-            *ngIf="isPlayer(asset)" 
-            [player]="asset" 
-            [removable]="true" 
-            (remove)="removePlayerFromTeam(2, i)" 
-            [mode]="team2Mode" 
-            class="trade-player-card">
-          </app-player-card>
-          <app-pick-card 
-            *ngIf="isPick(asset)" 
-            [pick]="asset" 
-            [removable]="true" 
-            (remove)="removePlayerFromTeam(2, i)" 
-            class="trade-player-card">
-          </app-pick-card>
-        </ng-container>
-        <app-player-search (playerSelected)="addPlayerToTeam(2, $event)"></app-player-search>
-      </div>
+      <ng-container *ngFor="let asset of team1Assets; let i = index">
+        <app-player-card 
+          *ngIf="isPlayer(asset)" 
+          [player]="asset" 
+          [removable]="true" 
+          (remove)="removePlayerFromTeam(1, i)" 
+          [mode]="team1Mode" 
+          class="trade-player-card">
+        </app-player-card>
+        <app-pick-card 
+          *ngIf="isPick(asset)" 
+          [pick]="asset" 
+          [removable]="true" 
+          (remove)="removePlayerFromTeam(1, i)" 
+          class="trade-player-card">
+        </app-pick-card>
+      </ng-container>
+      <app-player-search (playerSelected)="addPlayerToTeam(1, $event)"></app-player-search>
     </div>
+    <app-trade-evaluation 
+      [team1Assets]="team1Assets" 
+      [team2Assets]="team2Assets" 
+      [team1Mode]="team1Mode" 
+      [team2Mode]="team2Mode"
+      [showTeam]="1">
+    </app-trade-evaluation>
+  </div>
+  
+  <div class="team-with-evaluation">
+    <div class="team-section">
+      <div class="team-header">
+        <span class="team-label">Team 2</span>
+        <mat-button-toggle-group class="team-toggle" [(ngModel)]="team2Mode" name="team2Mode" appearance="legacy">
+          <mat-button-toggle value="contender">Contender</mat-button-toggle>
+          <mat-button-toggle value="rebuilder">Rebuilder</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+      <ng-container *ngFor="let asset of team2Assets; let i = index">
+        <app-player-card 
+          *ngIf="isPlayer(asset)" 
+          [player]="asset" 
+          [removable]="true" 
+          (remove)="removePlayerFromTeam(2, i)" 
+          [mode]="team2Mode" 
+          class="trade-player-card">
+        </app-player-card>
+        <app-pick-card 
+          *ngIf="isPick(asset)" 
+          [pick]="asset" 
+          [removable]="true" 
+          (remove)="removePlayerFromTeam(2, i)" 
+          class="trade-player-card">
+        </app-pick-card>
+      </ng-container>
+      <app-player-search (playerSelected)="addPlayerToTeam(2, $event)"></app-player-search>
+    </div>
+    <app-trade-evaluation 
+      [team1Assets]="team1Assets" 
+      [team2Assets]="team2Assets" 
+      [team1Mode]="team1Mode" 
+      [team2Mode]="team2Mode"
+      [showTeam]="2">
+    </app-trade-evaluation>
+  </div>
+</div>

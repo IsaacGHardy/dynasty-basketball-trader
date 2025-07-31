@@ -18,6 +18,7 @@ export class TradeEvaluationComponent {
   @Input() team2Assets!: Asset[];
   @Input() team1Mode: 'contender' | 'rebuilder' = 'contender';
   @Input() team2Mode: 'contender' | 'rebuilder' = 'contender';
+  @Input() showTeam?: 1 | 2; // New input to show only specific team's evaluation
 
   // Helper function to get value from any asset type
   private getAssetValue(asset: Asset, mode: 'contender' | 'rebuilder'): number {
