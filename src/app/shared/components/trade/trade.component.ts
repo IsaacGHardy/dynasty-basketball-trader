@@ -4,19 +4,14 @@ import { PlayerService, isPlayer, isPick } from '../../../services/player.servic
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { Player } from '../../../models/player';
-import { PlayerSearchComponent } from '../player-search/player-search.component';
-import { PlayerCardComponent } from '../player-card/player-card.component';
-import { PickCardComponent } from '../pick-card/pick-card.component';
+import { TeamTradeComponent } from '../team-trade/team-trade.component';
 import { TradeEvaluationComponent } from '../trade-evaluation/trade-evaluation.component';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { FormsModule } from '@angular/forms';
 import { Asset } from '../../../models/asset';
 
 @Component({
   selector: 'app-trade',
   standalone: true,
-  imports: [CommonModule, PlayerSearchComponent, PlayerCardComponent, PickCardComponent, TradeEvaluationComponent, MatButtonToggleModule, MatTooltipModule, FormsModule],
+  imports: [CommonModule, TeamTradeComponent, TradeEvaluationComponent],
   styleUrls: ['./trade.component.css'],
   templateUrl: './trade.component.html'
 })
@@ -55,19 +50,27 @@ export class TradeComponent {
     }
   }
 
-  addPlayerToTeam(team: 1 | 2, asset: Asset) {
-    if (team === 1) {
-      this.team1Assets.push(asset);
-    } else {
-      this.team2Assets.push(asset);
-    }
+  onTeam1AssetAdded(asset: Asset) {
+    this.team1Assets.push(asset);
   }
 
-  removePlayerFromTeam(team: 1 | 2, index: number) {
-    if (team === 1) {
-      this.team1Assets.splice(index, 1);
-    } else {
-      this.team2Assets.splice(index, 1);
-    }
+  onTeam1AssetRemoved(index: number) {
+    this.team1Assets.splice(index, 1);
+  }
+
+  onTeam1ModeChanged(mode: 'contender' | 'rebuilder') {
+    this.team1Mode = mode;
+  }
+
+  onTeam2AssetAdded(asset: Asset) {
+    this.team2Assets.push(asset);
+  }
+
+  onTeam2AssetRemoved(index: number) {
+    this.team2Assets.splice(index, 1);
+  }
+
+  onTeam2ModeChanged(mode: 'contender' | 'rebuilder') {
+    this.team2Mode = mode;
   }
 }

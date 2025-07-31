@@ -1,0 +1,27 @@
+<div class="team-section">
+  <div class="team-header">
+    <span class="team-label" matTooltip="Trades away the listed players" matTooltipShowDelay="0">{{ teamName }}</span>
+    <mat-button-toggle-group class="team-toggle" [(ngModel)]="mode" (change)="onModeChange($event.value)" name="teamMode" appearance="legacy">
+      <mat-button-toggle value="contender">Contender</mat-button-toggle>
+      <mat-button-toggle value="rebuilder">Rebuilder</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <ng-container *ngFor="let asset of assets; let i = index">
+    <app-player-card 
+      *ngIf="isPlayer(asset)" 
+      [player]="asset" 
+      [removable]="true" 
+      (remove)="onAssetRemoved(i)" 
+      [mode]="mode" 
+      class="trade-player-card">
+    </app-player-card>
+    <app-pick-card 
+      *ngIf="isPick(asset)" 
+      [pick]="asset" 
+      [removable]="true" 
+      (remove)="onAssetRemoved(i)" 
+      class="trade-player-card">
+    </app-pick-card>
+  </ng-container>
+  <app-player-search (playerSelected)="onAssetSelected($event)"></app-player-search>
+</div>
