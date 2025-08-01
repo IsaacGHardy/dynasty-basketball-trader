@@ -1,9 +1,8 @@
 <mat-form-field 
   appearance="fill" 
   class="contender-status-field"
-  [matTooltip]="tooltip"
-  matTooltipPosition="left"
-  matTooltipShowDelay="1000">
+  [matTooltip]="currentTooltip"
+  matTooltipPosition="left">
   <mat-select 
     [value]="value" 
     (valueChange)="onValueChange($event)"
@@ -12,7 +11,9 @@
     <mat-option 
       *ngFor="let option of allOptions" 
       [value]="option.value"
-      class="contender-status-option">
+      class="contender-status-option"
+      [matTooltip]="option.tooltip"
+      matTooltipPosition="left">
       {{ option.label }}
     </mat-option>
   </mat-select>

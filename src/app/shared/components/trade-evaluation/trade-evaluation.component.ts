@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Player } from '../../../models/player';
-import { Pick } from '../../../models/pick';
 import { Asset } from '../../../models/asset';
+import { AssetTier } from '../../../models/asset_tier';
 import { isPlayer, isPick } from '../../../services/player.service';
 import { ContenderStatus } from '../../../models/contender-status';
 
@@ -43,18 +42,49 @@ export class TradeEvaluationComponent {
     return 0;
   }
 
-  private calculateValue(assets: Asset[], mode: ContenderStatus, bestAsset: number): number {
-    if(!assets || assets.length === 0) return 0;
+  private calculateTieredAssets(assetValues: number[], bestAsset: number, tier: AssetTier): number {
     let totalValue = 0;
-    for (let i = 0; i < assets.length; i++) {
-      let assetValue = this.getAssetValue(assets[i], mode);
-
-      // Decreasing percent of value maintained based on distance from best asset
-      let weight = (100 - (bestAsset - assetValue)) / 100;
-      totalValue += ((assetValue * (weight)) ** 2);
-    }
+    
+    assetValues.forEach((assetValue, index) => {
+      const weight = (100 - (bestAsset - assetValue)) / 100;
+      const diminishingFactor = this.getDiminishingFactor(tier, index);
+      totalValue += ((assetValue * weight) ** 2) * diminishingFactor;
+    });
+    
     return totalValue;
   }
+
+private getDiminishingFactor(tier: AssetTier, index: number): number {
+  switch (tier) {
+    case AssetTier.HIGH:
+      return 1; // No diminishing returns for high value assets
+    case AssetTier.MID:
+      return Math.pow(0.5, index + 1); // 50% diminishing returns
+    case AssetTier.LOW:
+      return 0;
+    default:
+      return 1;
+  }
+}
+
+  private calculateValue(assets: Asset[], mode: ContenderStatus, bestAsset: number): number {
+    if(!assets || assets.length === 0) return 0;
+     // Get all asset values
+    const sortedAssetValues = assets
+    .map(asset => this.getAssetValue(asset, mode))
+    .sort((a, b) => b - a);
+
+    // Categorize assets by tiers
+    const { highValue, midValue, lowValue } = this.categorizeAssetsByTier(sortedAssetValues, bestAsset);
+
+    // Calculate total value with tier-based diminishing returns
+    let totalValue = 0;
+    totalValue += this.calculateTieredAssets(highValue, bestAsset, AssetTier.HIGH);
+    totalValue += this.calculateTieredAssets(midValue, bestAsset, AssetTier.MID);
+    totalValue += this.calculateTieredAssets(lowValue, bestAsset, AssetTier.LOW);
+
+    return totalValue;
+    }
 
   private calculateBestAsset(): number {
     let t1bestAsset = 0;
@@ -67,14 +97,16 @@ export class TradeEvaluationComponent {
     return Math.max(t1bestAsset, t2bestAsset);
   }
 
-  private evaluateTradeForTeam(incomingAssets: Asset[], outgoingAssets: Asset[], mode: ContenderStatus, bestAsset: number): number {
+  private categorizeAssetsByTier(assetValues: number[], bestAsset: number) {
+    const highValueThreshold = bestAsset * 0.9;   // 90%+ of best asset = high value
+    const midValueThreshold = bestAsset * 0.7;    // 70-90% of best asset = mid value
 
-    const incomingValue = this.calculateValue(incomingAssets, mode, bestAsset);
-    const outgoingValue = this.calculateValue(outgoingAssets, mode, bestAsset);
-
-    return (incomingValue - outgoingValue);
+    const highValue = assetValues.filter(v => v >= highValueThreshold);
+    const midValue = assetValues.filter(v => v >= midValueThreshold && v < highValueThreshold);
+    const lowValue = assetValues.filter(v => v < midValueThreshold);
+    
+    return { highValue, midValue, lowValue };
   }
-
 
   // Team 1: incoming = team1Assets, outgoing = team2Assets
   // Team 2: incoming = team2Assets, outgoing = team1Assets
@@ -98,19 +130,17 @@ export class TradeEvaluationComponent {
 
     const bestAsset = this.calculateBestAsset();
 
-    const team1Value = this.evaluateTradeForTeam(this.team1Assets, this.team2Assets, this.team1Mode, bestAsset);
-    const team2Value = this.evaluateTradeForTeam(this.team2Assets, this.team1Assets, this.team2Mode, bestAsset);
+    const team1Value = this.calculateValue(this.team1Assets, this.team1Mode, bestAsset);
+    const team2Value = this.calculateValue(this.team2Assets, this.team2Mode, bestAsset);
 
-    const team1GivingValue = this.calculateValue(this.team1Assets, this.team1Mode, bestAsset);
-    const team2GivingValue = this.calculateValue(this.team2Assets, this.team2Mode, bestAsset);
-    const totalTradeValue = team1GivingValue + team2GivingValue;
+    const totalTradeValue = team1Value + team2Value;
 
     // If no meaningful value is being traded
     if (totalTradeValue === 0) {
       return 50;
     }
 
-    return ((team1Value - team2Value) * (100 / totalTradeValue)) + 50;
+    return ((team2Value - team1Value) * (100 / totalTradeValue)) + 50;
   }
 
 

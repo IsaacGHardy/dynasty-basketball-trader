@@ -64,14 +64,19 @@
   display: none !important;
 }
 
+::ng-deep .mat-option {
+  background: #232323 !important;
+  color: #ff9800 !important;
+}
+
 ::ng-deep .mat-option.mat-active, ::ng-deep .mat-option:hover {
   background: #ff9800 !important;
   color: #232323 !important;
 }
 
 .player-search-name {
-  color: #ff9800;
-  font-weight: 700;
+  color: #ffffff;
+  font-weight: 500;
 }
 
 .player-search-no-results {
