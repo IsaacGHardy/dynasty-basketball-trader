@@ -1,10 +1,12 @@
 <div class="team-section">
   <div class="team-header">
     <span class="team-label" matTooltip="Trades away the listed players" matTooltipShowDelay="0">{{ teamName }}</span>
-    <mat-button-toggle-group class="team-toggle" [(ngModel)]="mode" (change)="onModeChange($event.value)" name="teamMode" appearance="legacy">
-      <mat-button-toggle value="contender">Contender</mat-button-toggle>
-      <mat-button-toggle value="rebuilder">Rebuilder</mat-button-toggle>
-    </mat-button-toggle-group>
+    <app-contender-status-selector 
+      [value]="mode" 
+      (valueChange)="onModeChange($event)"
+      tooltip="Select this team's contention status"
+      class="team-mode-select">
+    </app-contender-status-selector>
   </div>
   <ng-container *ngFor="let asset of assets; let i = index">
     <app-player-card 

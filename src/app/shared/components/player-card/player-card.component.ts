@@ -5,6 +5,7 @@ import { Player } from '../../../models/player';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
+import { ContenderStatus } from '../../../models/contender-status';
 
 @Component({
   selector: 'app-player-card',
@@ -18,7 +19,7 @@ export class PlayerCardComponent {
   @Input() player: Player | null = null;
   @Input() removable = false;
   @Input() rank?: number;
-  @Input() mode: 'contender' | 'rebuilder' = 'rebuilder';
+  @Input() mode: ContenderStatus = ContenderStatus.NEUTRAL;
   @Output() remove = new EventEmitter<void>();
   readonly isOpen = signal(false);
 
@@ -38,6 +39,19 @@ export class PlayerCardComponent {
 
   get value(): number | null {
     if (!this.player) return null;
-    return this.mode === 'contender' ? this.player.contend_value : this.player.rebuild_value;
+    switch (this.mode) {
+      case ContenderStatus.CONTEND:
+        return this.player.contend_value;
+      case ContenderStatus.COMPETE:
+        return this.player.compete_value;
+      case ContenderStatus.NEUTRAL:
+        return this.player.neutral_value;
+      case ContenderStatus.RELOAD:
+        return this.player.reload_value;
+      case ContenderStatus.REBUILD:
+        return this.player.rebuild_value;
+      default:
+        return this.player.neutral_value;
+    }
   }
 };

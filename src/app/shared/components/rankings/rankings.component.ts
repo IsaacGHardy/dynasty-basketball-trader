@@ -4,16 +4,17 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { PlayerCardComponent } from '../player-card/player-card.component';
 import { PickCardComponent } from '../pick-card/pick-card.component';
+import { ContenderStatusSelectorComponent } from '../contender-status-selector/contender-status-selector.component';
 import { Player } from '../../../models/player';
 import { Pick } from '../../../models/pick';
 import { Asset } from '../../../models/asset';
 import { PlayerService, isPlayer, isPick } from '../../../services/player.service';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { ContenderStatus } from '../../../models/contender-status';
 
 @Component({
   selector: 'app-rankings',
   standalone: true,
-  imports: [CommonModule, PlayerCardComponent, PickCardComponent, MatButtonToggleModule],
+  imports: [CommonModule, PlayerCardComponent, PickCardComponent, ContenderStatusSelectorComponent],
   templateUrl: './rankings.component.html',
   styleUrl: './rankings.component.css',
 })
@@ -23,11 +24,15 @@ export class RankingsComponent {
   pageSize = 10;
   page = signal(0);
   loading = signal(true);
-  mode = signal<'contender' | 'rebuilder'>('contender');
+  mode = signal<ContenderStatus>(ContenderStatus.NEUTRAL);
+  selectedMode = ContenderStatus.NEUTRAL;
 
   // Make type guards available to template
   isPlayer = isPlayer;
   isPick = isPick;
+
+  // Expose enum to template
+  ContenderStatus = ContenderStatus;
 
   constructor(private playerService: PlayerService) {
     this.playerService.playerData$
@@ -39,9 +44,22 @@ export class RankingsComponent {
       });
   }
 
-  private getAssetValue(asset: Asset, mode: 'contender' | 'rebuilder'): number {
+  private getAssetValue(asset: Asset, mode: ContenderStatus): number {
     if (isPlayer(asset)) {
-      return (mode === 'contender' ? asset.contend_value : asset.rebuild_value) || 0;
+      switch (mode) {
+        case ContenderStatus.CONTEND:
+          return asset.contend_value || 0;
+        case ContenderStatus.COMPETE:
+          return asset.compete_value || 0;
+        case ContenderStatus.NEUTRAL:
+          return asset.neutral_value || 0;
+        case ContenderStatus.RELOAD:
+          return asset.reload_value || 0;
+        case ContenderStatus.REBUILD:
+          return asset.rebuild_value || 0;
+        default:
+          return asset.neutral_value || 0;
+      }
     } else if (isPick(asset)) {
       return asset.value || 0;
     }
@@ -62,7 +80,8 @@ export class RankingsComponent {
     setTimeout(() => this.page.set(currentPage), 0);
   }
 
-  onModeChange(mode: 'contender' | 'rebuilder') {
+  onModeChange(mode: ContenderStatus) {
+    this.selectedMode = mode;
     this.mode.set(mode);
     this.sortAssets();
   }

@@ -4,6 +4,7 @@ import { Player } from '../../../models/player';
 import { Pick } from '../../../models/pick';
 import { Asset } from '../../../models/asset';
 import { isPlayer, isPick } from '../../../services/player.service';
+import { ContenderStatus } from '../../../models/contender-status';
 
 @Component({
   selector: 'app-trade-evaluation',
@@ -16,85 +17,128 @@ import { isPlayer, isPick } from '../../../services/player.service';
 export class TradeEvaluationComponent {
   @Input() team1Assets!: Asset[];
   @Input() team2Assets!: Asset[];
-  @Input() team1Mode: 'contender' | 'rebuilder' = 'contender';
-  @Input() team2Mode: 'contender' | 'rebuilder' = 'contender';
-  @Input() showTeam?: 1 | 2; // New input to show only specific team's evaluation
+  @Input() team1Mode: ContenderStatus = ContenderStatus.NEUTRAL;
+  @Input() team2Mode: ContenderStatus = ContenderStatus.NEUTRAL;
 
   // Helper function to get value from any asset type
-  private getAssetValue(asset: Asset, mode: 'contender' | 'rebuilder'): number {
+  private getAssetValue(asset: Asset, mode: ContenderStatus): number {
     if (isPlayer(asset)) {
-      return (mode === 'contender' ? asset.contend_value : asset.rebuild_value) || 0;
+      switch (mode) {
+        case ContenderStatus.CONTEND:
+          return asset.contend_value || 0;
+        case ContenderStatus.COMPETE:
+          return asset.compete_value || 0;
+        case ContenderStatus.NEUTRAL:
+          return asset.neutral_value || 0;
+        case ContenderStatus.RELOAD:
+          return asset.reload_value || 0;
+        case ContenderStatus.REBUILD:
+          return asset.rebuild_value || 0;
+        default:
+          return asset.neutral_value || 0;
+      }
     } else if (isPick(asset)) {
       return asset.value || 0;
     }
     return 0;
   }
 
-  calculateValue(assets: Asset[], mode: 'contender' | 'rebuilder', bestAsset: number): number {
+  private calculateValue(assets: Asset[], mode: ContenderStatus, bestAsset: number): number {
     if(!assets || assets.length === 0) return 0;
     let totalValue = 0;
     for (let i = 0; i < assets.length; i++) {
       let assetValue = this.getAssetValue(assets[i], mode);
+
+      // Decreasing percent of value maintained based on distance from best asset
       let weight = (100 - (bestAsset - assetValue)) / 100;
       totalValue += ((assetValue * (weight)) ** 2);
     }
     return totalValue;
   }
 
-  calculateBestAssetOneTeam(incomingAssets: Asset[], outgoingAssets: Asset[], mode: 'contender' | 'rebuilder'): number {
-    let bestAsset = 0;
-    const allAssets = [...(incomingAssets || []), ...(outgoingAssets || [])];
+  private calculateBestAsset(): number {
+    let t1bestAsset = 0;
+    let t2bestAsset = 0;
+    const allAssets = [...(this.team1Assets || []), ...(this.team2Assets || [])];
     if (allAssets.length > 0) {
-      bestAsset = Math.max(...allAssets.map(asset => this.getAssetValue(asset, mode)));
+      t1bestAsset = Math.max(...allAssets.map(asset => this.getAssetValue(asset, this.team1Mode)));
+      t2bestAsset = Math.max(...allAssets.map(asset => this.getAssetValue(asset, this.team2Mode)));
     }
-    return bestAsset;
+    return Math.max(t1bestAsset, t2bestAsset);
   }
 
-  evaluateTradeForTeam(incomingAssets: Asset[], outgoingAssets: Asset[], mode: 'contender' | 'rebuilder'): number {
-    const bestAsset = this.calculateBestAssetOneTeam(incomingAssets, outgoingAssets, mode);
+  private evaluateTradeForTeam(incomingAssets: Asset[], outgoingAssets: Asset[], mode: ContenderStatus, bestAsset: number): number {
 
     const incomingValue = this.calculateValue(incomingAssets, mode, bestAsset);
     const outgoingValue = this.calculateValue(outgoingAssets, mode, bestAsset);
 
-    return (incomingValue - outgoingValue) * (100 / (incomingValue + outgoingValue)) + 50;
+    return (incomingValue - outgoingValue);
   }
 
 
-  // Team 1: incoming = team2Assets, outgoing = team1Assets
-  // Team 2: incoming = team1Assets, outgoing = team2Assets
-  get team1Value(): number {
-    return this.evaluateTradeForTeam(this.team2Assets || [], this.team1Assets || [], this.team1Mode);
-  }
-  get team2Value(): number {
-    return this.evaluateTradeForTeam(this.team1Assets || [], this.team2Assets || [], this.team2Mode);
+  // Team 1: incoming = team1Assets, outgoing = team2Assets
+  // Team 2: incoming = team2Assets, outgoing = team1Assets
+  getTradeResult(): number {
+    if ((!this.team1Assets || this.team1Assets.length === 0) && 
+        (!this.team2Assets || this.team2Assets.length === 0)) {
+      return 50; // No assets on either side
+    }
+    
+    // If only Team 1 has assets, Team 1 wins
+    if ((!this.team2Assets || this.team2Assets.length === 0) && 
+        this.team1Assets && this.team1Assets.length > 0) {
+      return 0; // Team 1 wins big
+    }
+    
+    // If only Team 2 has assets, Team 2 wins
+    if ((!this.team1Assets || this.team1Assets.length === 0) && 
+        this.team2Assets && this.team2Assets.length > 0) {
+      return 100; // Team 2 wins big
+    }
+
+    const bestAsset = this.calculateBestAsset();
+
+    const team1Value = this.evaluateTradeForTeam(this.team1Assets, this.team2Assets, this.team1Mode, bestAsset);
+    const team2Value = this.evaluateTradeForTeam(this.team2Assets, this.team1Assets, this.team2Mode, bestAsset);
+
+    const team1GivingValue = this.calculateValue(this.team1Assets, this.team1Mode, bestAsset);
+    const team2GivingValue = this.calculateValue(this.team2Assets, this.team2Mode, bestAsset);
+    const totalTradeValue = team1GivingValue + team2GivingValue;
+
+    // If no meaningful value is being traded
+    if (totalTradeValue === 0) {
+      return 50;
+    }
+
+    return ((team1Value - team2Value) * (100 / totalTradeValue)) + 50;
   }
 
-  get team1Bar() {
-    return this.getBarProps(this.team1Value);
-  }
-  get team2Bar() {
-    return this.getBarProps(this.team2Value);
+
+  get tradeBar() {
+    return this.getBarProps(this.getTradeResult());
   }
 
   getBarProps(value: number) {
     // value is centered at 50, range 0-100
+    // < 50 = Team 1 wins, > 50 = Team 2 wins
     let left: string, width: string, color: string, status: string, statusClass: string;
     const absDelta = Math.abs(value - 50);
+    
+    // Always use orange gradient for the bar
+    color = 'linear-gradient(90deg, #ff9800, #ffb74d)';
+    
     if (value > 52) {
-      color = '#4caf50';
-      status = absDelta > 20 ? 'Large value gain' : 'Small value gain';
-      statusClass = 'gain';
+      status = absDelta > 20 ? 'Team 2 wins big' : 'Team 2 wins slightly';
+      statusClass = 'team2-win';
       left = '50%';
       width = (value - 50) + '%';
     } else if (value < 48) {
-      color = '#f44336';
-      status = absDelta > 20 ? 'Large value loss' : 'Small value loss';
-      statusClass = 'loss';
+      status = absDelta > 20 ? 'Team 1 wins big' : 'Team 1 wins slightly';
+      statusClass = 'team1-win';
       left = value + '%';
       width = (50 - value) + '%';
     } else {
-      color = '#ff9800';
-      status = 'Neutral value move';
+      status = 'Fair trade';
       statusClass = 'neutral';
       left = '48%';
       width = '4%';
@@ -102,15 +146,7 @@ export class TradeEvaluationComponent {
     return { left, width, color, status, statusClass };
   }
 
-  // I want to calculate the value for each team as both teams can win given the contend vs rebuild values
-  // Instead of having one bar, I'd like to have two bars, one for each team
-
   get tradeStatus(): string {
-    // Example: summarize both teams' value moves
-    const t1 = this.team1Bar.status;
-    const t2 = this.team2Bar.status;
-    if (t1 === 'Neutral value move' && t2 === 'Neutral value move') return 'Both teams: Neutral value move';
-    if (t1 === t2) return `Both teams: ${t1}`;
-    return `Team 1: ${t1} | Team 2: ${t2}`;
+    return this.tradeBar.status;
   }
 }

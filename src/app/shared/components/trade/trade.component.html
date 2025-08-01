@@ -1,5 +1,5 @@
 <div class="trade-container">
-  <div class="team-with-evaluation">
+  <div class="teams-container">
     <app-team-trade
       teamName="Team 1"
       [assets]="team1Assets"
@@ -8,16 +8,7 @@
       (assetRemoved)="onTeam1AssetRemoved($event)"
       (modeChanged)="onTeam1ModeChanged($event)">
     </app-team-trade>
-    <app-trade-evaluation 
-      [team1Assets]="team1Assets" 
-      [team2Assets]="team2Assets" 
-      [team1Mode]="team1Mode" 
-      [team2Mode]="team2Mode"
-      [showTeam]="1">
-    </app-trade-evaluation>
-  </div>
-  
-  <div class="team-with-evaluation">
+    
     <app-team-trade
       teamName="Team 2"
       [assets]="team2Assets"
@@ -26,12 +17,14 @@
       (assetRemoved)="onTeam2AssetRemoved($event)"
       (modeChanged)="onTeam2ModeChanged($event)">
     </app-team-trade>
+  </div>
+  
+  <div class="evaluation-container">
     <app-trade-evaluation 
       [team1Assets]="team1Assets" 
       [team2Assets]="team2Assets" 
       [team1Mode]="team1Mode" 
-      [team2Mode]="team2Mode"
-      [showTeam]="2">
+      [team2Mode]="team2Mode">
     </app-trade-evaluation>
   </div>
 </div>

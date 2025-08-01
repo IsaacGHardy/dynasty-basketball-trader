@@ -48,12 +48,10 @@ export class PlayerSearchComponent {
 
   onOptionSelected(asset: Asset) {
     this.playerSelected.emit(asset);
-    this.search.setValue(''); // Reset the input after selection to prevent [object Object]
-  }
-
-  onInputBlur() {
-    // Clear the search input when user clicks outside (loses focus)
-    this.search.setValue('');
+    // Clear the input after a slight delay to ensure the selection event completes
+    setTimeout(() => {
+      this.search.setValue('');
+    }, 0);
   }
 
   getDisplayName(asset: Asset): string {

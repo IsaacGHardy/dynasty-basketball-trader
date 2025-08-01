@@ -1,0 +1,184 @@
+/* Material Form Field Styling */
+.contender-status-field {
+  font-size: 0.9rem;
+  width: 140px !important;
+  min-width: 140px !important;
+}
+
+/* Remove Material's default spacing and make it tighter */
+::ng-deep .contender-status-field .mat-mdc-form-field-wrapper {
+  padding-bottom: 0 !important;
+  background: transparent !important;
+}
+
+::ng-deep .contender-status-field .mat-mdc-form-field-flex {
+  align-items: center !important;
+  padding: 0.3rem 0.6rem !important;
+  background: #232323 !important;
+  border: 2px solid #ff9800 !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+  width: 100% !important;
+}
+
+::ng-deep .contender-status-field .mat-mdc-form-field-infix {
+  padding: 0.2rem 0 !important;
+  border-top: none !important;
+  min-height: auto !important;
+  width: auto !important;
+}
+
+/* Remove any background from the form field itself */
+::ng-deep .contender-status-field .mat-mdc-text-field-wrapper {
+  background: transparent !important;
+}
+
+/* Remove Material's grey background completely */
+::ng-deep .contender-status-field {
+  background: transparent !important;
+}
+
+::ng-deep .contender-status-field .mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+}
+
+/* Remove any residual Material backgrounds */
+::ng-deep .contender-status-field .mat-mdc-form-field-focus-overlay {
+  display: none !important;
+}
+
+/* Remove Material underlines completely */
+::ng-deep .contender-status-field .mat-mdc-line-ripple {
+  display: none !important;
+}
+
+::ng-deep .contender-status-field .mat-mdc-form-field-underline {
+  display: none !important;
+}
+
+::ng-deep .contender-status-field .mdc-line-ripple {
+  display: none !important;
+}
+
+::ng-deep .contender-status-field .mdc-line-ripple::before,
+::ng-deep .contender-status-field .mdc-line-ripple::after {
+  display: none !important;
+}
+
+/* Hover state for the field */
+::ng-deep .contender-status-field:hover .mat-mdc-form-field-flex {
+  border-color: #ffb74d !important;
+  background: #2a2a2a !important;
+}
+
+/* Override Material Design styles to match theme */
+::ng-deep .contender-status-field .mat-mdc-form-field-outline {
+  display: none !important;
+}
+
+::ng-deep .contender-status-field .mat-mdc-form-field-outline-thick {
+  display: none !important;
+}
+
+/* Focus state for custom border */
+::ng-deep .contender-status-field.mat-focused .mat-mdc-form-field-flex {
+  border-color: #ffb74d !important;
+  background: #2a2a2a !important;
+  box-shadow: 0 0 8px rgba(255, 152, 0, 0.3) !important;
+}
+
+::ng-deep .contender-status-field .mat-mdc-select-value {
+  color: #ff9800 !important;
+  font-weight: 600;
+}
+
+::ng-deep .contender-status-field .mat-mdc-select-arrow {
+  color: #ff9800 !important;
+}
+
+/* Dropdown panel styling */
+::ng-deep .mat-mdc-select-panel {
+  background: #232323 !important;
+  border: 2px solid #ff9800 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  max-height: none !important;
+  min-width: auto !important;
+  width: auto !important;
+  padding: 0 !important;
+}
+
+/* Force dropdown to match the trigger width */
+::ng-deep .cdk-overlay-pane .mat-mdc-select-panel {
+  width: 140px !important;
+  min-width: 140px !important;
+  max-width: 140px !important;
+}
+
+/* Force dropdown to match exact width of trigger */
+::ng-deep .mat-mdc-select-panel {
+  width: var(--mat-select-trigger-width) !important;
+}
+
+/* Ensure options match the panel width exactly */
+::ng-deep .mat-mdc-option {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Option styling */
+::ng-deep .mat-mdc-option {
+  background: #232323 !important;
+  color: #ff9800 !important;
+  font-weight: 600 !important;
+  padding: 0.5rem 0.6rem !important;
+  transition: background-color 0.2s ease !important;
+  min-height: auto !important;
+  height: auto !important;
+  line-height: 1.2 !important;
+  font-size: 0.9rem !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  text-align: left !important;
+}
+
+::ng-deep .mat-mdc-option:hover {
+  background: #ff9800 !important;
+  color: #232323 !important;
+}
+
+::ng-deep .mat-mdc-option.mat-mdc-option-active {
+  background: #ff9800 !important;
+  color: #232323 !important;
+}
+
+::ng-deep .mat-mdc-option.mdc-list-item--selected {
+  background: #2a2a2a !important;
+  color: #ff9800 !important;
+}
+
+/* Remove default Material ripple effects */
+::ng-deep .mat-mdc-option .mat-ripple-element {
+  display: none !important;
+}
+
+/* Prevent scrolling - show all options */
+::ng-deep .cdk-overlay-pane {
+  max-height: none !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mat-mdc-option-group,
+::ng-deep .mat-mdc-select-panel .mat-mdc-option {
+  overflow: visible !important;
+}
+
+/* Remove any scrollbar */
+::ng-deep .mat-mdc-select-panel {
+  overflow: visible !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+::ng-deep .mat-mdc-select-panel::-webkit-scrollbar {
+  display: none !important;
+}

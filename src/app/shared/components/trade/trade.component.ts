@@ -7,6 +7,7 @@ import { Player } from '../../../models/player';
 import { TeamTradeComponent } from '../team-trade/team-trade.component';
 import { TradeEvaluationComponent } from '../trade-evaluation/trade-evaluation.component';
 import { Asset } from '../../../models/asset';
+import { ContenderStatus } from '../../../models/contender-status';
 
 @Component({
   selector: 'app-trade',
@@ -20,8 +21,8 @@ export class TradeComponent {
   team1Assets: Asset[] = [];
   team2Assets: Asset[] = [];
 
-  team1Mode: 'contender' | 'rebuilder' = 'contender';
-  team2Mode: 'contender' | 'rebuilder' = 'contender';
+  team1Mode: ContenderStatus = ContenderStatus.NEUTRAL;
+  team2Mode: ContenderStatus = ContenderStatus.NEUTRAL;
 
   // Make type guards available to template
   isPlayer = isPlayer;
@@ -58,7 +59,7 @@ export class TradeComponent {
     this.team1Assets.splice(index, 1);
   }
 
-  onTeam1ModeChanged(mode: 'contender' | 'rebuilder') {
+  onTeam1ModeChanged(mode: ContenderStatus) {
     this.team1Mode = mode;
   }
 
@@ -70,7 +71,7 @@ export class TradeComponent {
     this.team2Assets.splice(index, 1);
   }
 
-  onTeam2ModeChanged(mode: 'contender' | 'rebuilder') {
+  onTeam2ModeChanged(mode: ContenderStatus) {
     this.team2Mode = mode;
   }
 }

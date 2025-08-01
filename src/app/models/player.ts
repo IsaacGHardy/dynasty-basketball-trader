@@ -19,4 +19,7 @@ export interface Player {
     rebuild_value: number;
     age: number;
     type: string
+    compete_value: number;
+    neutral_value: number;
+    reload_value: number;
 }

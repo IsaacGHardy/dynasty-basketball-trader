@@ -1,16 +1,12 @@
 <div class="rankings-container">
   <div class="rankings-header">
     <h2 class="rankings-title">Rankings</h2>
-    <mat-button-toggle-group
-      class="rankings-toggle"
-      [value]="mode()"
-      (change)="onModeChange($event.value)"
-      appearance="legacy"
-      exclusive
-    >
-      <mat-button-toggle value="contender">Contender</mat-button-toggle>
-      <mat-button-toggle value="rebuilder">Rebuilder</mat-button-toggle>
-    </mat-button-toggle-group>
+    <app-contender-status-selector 
+      [value]="selectedMode" 
+      (valueChange)="onModeChange($event)"
+      tooltip="Select the contention status"
+      class="rankings-mode-select">
+    </app-contender-status-selector>
   </div>
   <div *ngIf="loading(); else assetList" class="loading-indicator">
     Loading assets...
