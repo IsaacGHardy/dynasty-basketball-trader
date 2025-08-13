@@ -23,7 +23,8 @@
         <app-pick-card
           *ngIf="isPick(item.asset)"
           [pick]="item.asset"
-          [rank]="item.rank">
+          [rank]="item.rank"
+          [mode]="mode()">
         </app-pick-card>
       </ng-container>
     </div>

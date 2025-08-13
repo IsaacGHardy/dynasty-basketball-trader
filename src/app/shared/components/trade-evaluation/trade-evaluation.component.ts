@@ -21,25 +21,20 @@ export class TradeEvaluationComponent {
 
   // Helper function to get value from any asset type
   private getAssetValue(asset: Asset, mode: ContenderStatus): number {
-    if (isPlayer(asset)) {
-      switch (mode) {
-        case ContenderStatus.CONTEND:
-          return asset.contend_value || 0;
-        case ContenderStatus.COMPETE:
-          return asset.compete_value || 0;
-        case ContenderStatus.NEUTRAL:
-          return asset.neutral_value || 0;
-        case ContenderStatus.RELOAD:
-          return asset.reload_value || 0;
-        case ContenderStatus.REBUILD:
-          return asset.rebuild_value || 0;
-        default:
-          return asset.neutral_value || 0;
-      }
-    } else if (isPick(asset)) {
-      return asset.value || 0;
+    switch (mode) {
+      case ContenderStatus.CONTEND:
+        return asset.contend_value || 0;
+      case ContenderStatus.COMPETE:
+        return asset.compete_value || 0;
+      case ContenderStatus.NEUTRAL:
+        return asset.neutral_value || 0;
+      case ContenderStatus.RELOAD:
+        return asset.reload_value || 0;
+      case ContenderStatus.REBUILD:
+        return asset.rebuild_value || 0;
+      default:
+        return asset.neutral_value || 0;
     }
-    return 0;
   }
 
   private calculateTieredAssets(assetValues: number[], bestAsset: number, tier: AssetTier): number {

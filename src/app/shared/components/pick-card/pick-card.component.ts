@@ -4,6 +4,7 @@ import { Pick } from '../../../models/pick';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
+import { ContenderStatus } from '../../../models/contender-status';
 
 @Component({
   selector: 'app-pick-card',
@@ -17,6 +18,7 @@ export class PickCardComponent {
   @Input() pick: Pick | null = null;
   @Input() removable = false;
   @Input() rank?: number;
+  @Input() mode: ContenderStatus = ContenderStatus.NEUTRAL;
   @Output() remove = new EventEmitter<void>();
 
   getPickDisplay(): string {
@@ -38,6 +40,24 @@ export class PickCardComponent {
       case 'mid': return '#ff9800';
       case 'late': return '#f44336';
       default: return '#bdbdbd';
+    }
+  }
+
+  get value(): number | null {
+    if (!this.pick) return null;
+    switch (this.mode) {
+      case ContenderStatus.CONTEND:
+        return this.pick.contend_value;
+      case ContenderStatus.COMPETE:
+        return this.pick.compete_value;
+      case ContenderStatus.NEUTRAL:
+        return this.pick.neutral_value;
+      case ContenderStatus.RELOAD:
+        return this.pick.reload_value;
+      case ContenderStatus.REBUILD:
+        return this.pick.rebuild_value;
+      default:
+        return this.pick.neutral_value;
     }
   }
 }
