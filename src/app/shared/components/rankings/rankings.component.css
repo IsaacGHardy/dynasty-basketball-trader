@@ -1,56 +1,4 @@
-@media (max-width: 1024px) and (min-width: 701px) {
-  .player-list {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.4rem;
-  }
-}
-
-@media (max-width: 700px) {
-  .rankings-container {
-    padding: 0.5rem 0.2rem 0.5rem 0.2rem;
-    margin: 0.5rem auto;
-    border-width: 3px;
-    border-radius: 8px;
-    width: 100vw;
-    min-width: 0;
-    box-sizing: border-box;
-  }
-  .rankings-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.5rem;
-    margin-bottom: 0.7rem;
-  }
-  .rankings-title {
-    font-size: 1.2rem;
-    text-align: center;
-    margin-bottom: 0.2rem;
-  }
-  .rankings-toggle {
-    width: 100%;
-    margin-left: 0;
-    margin-bottom: 0.2rem;
-    font-size: 0.95rem;
-    border-width: 1.5px;
-    border-radius: 6px;
-    height: 2rem;
-  }
-  .player-list {
-    grid-template-columns: 1fr;
-    gap: 0.3rem;
-  }
-  .pagination-controls {
-    gap: 0.7rem;
-    font-size: 0.95rem;
-    margin-top: 0.5rem;
-  }
-  .pagination-controls button {
-    padding: 0.3rem 0.7rem;
-    font-size: 0.95rem;
-    border-width: 1.5px;
-    border-radius: 5px;
-  }
-}
+/* Base styles */
 .rankings-container {
   background: #232323;
   border-radius: 12px;
@@ -64,7 +12,6 @@
   flex-direction: column;
   align-items: center;
 }
-
 
 .rankings-header {
   width: 100%;
@@ -87,6 +34,12 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
+  justify-items: center;
+}
+
+.player-list > * {
+  width: 456px;
+  max-width: 100%;
 }
 
 .player-list .header-content {
@@ -128,4 +81,115 @@
 .pagination-controls button:not(:disabled):hover {
   background: #ff9800;
   color: #232323;
+}
+
+.loading-indicator {
+  color: #ff9800;
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Tablet styles */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .player-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem;
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .rankings-container {
+    padding: 1rem 0.5rem;
+    margin: 1rem auto;
+    border-width: 4px;
+    border-radius: 10px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .rankings-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .rankings-title {
+    font-size: 1.5rem;
+    text-align: left;
+    margin-bottom: 0;
+    margin-left: 1rem;
+    flex: 0 0 auto;
+  }
+  
+  .player-list {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    justify-items: center;
+  }
+  
+  .player-list > * {
+    width: calc(100% - 2rem);
+    max-width: 500px;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  
+  .pagination-controls {
+    gap: 1rem;
+    font-size: 0.95rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .pagination-controls button {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    border-width: 2px;
+    border-radius: 6px;
+    min-width: 60px;
+  }
+}
+
+/* Small mobile styles */
+@media (max-width: 480px) {
+  .rankings-container {
+    padding: 0.75rem 0.25rem;
+    margin: 0.5rem auto;
+    border-width: 3px;
+    border-radius: 8px;
+  }
+  
+  .rankings-header {
+    gap: 0.75rem;
+  }
+  
+  .rankings-title {
+    font-size: 1.3rem;
+    margin-left: 0.5rem;
+  }
+  
+  .player-list {
+    gap: 0.4rem;
+  }
+  
+  .player-list > * {
+    width: calc(100% - 1rem);
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+  
+  .pagination-controls {
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  
+  .pagination-controls button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    min-width: 50px;
+  }
 }

@@ -10,7 +10,6 @@ import { Asset } from '../models/asset';
 export class PlayerService {
   private baseUrl = 'http://127.0.0.1:8000/players';
 
-
   playerData$: Observable<Asset[]>;
 
   constructor(private http: HttpClient, private scoringService: ScoringService) {

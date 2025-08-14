@@ -1,5 +1,5 @@
 
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, HostListener } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { PlayerCardComponent } from '../player-card/player-card.component';
@@ -20,12 +20,14 @@ import { ContenderStatus } from '../../../models/contender-status';
 })
 export class RankingsComponent {
   allAssets: Asset[] = [];
-  assets: Asset[] = [];
-  pageSize = 10;
+  assets = signal<Asset[]>([]);
+  desktopPageSize = 10;
+  mobilePageSize = 5;
   page = signal(0);
   loading = signal(true);
   mode = signal<ContenderStatus>(ContenderStatus.NEUTRAL);
   selectedMode = ContenderStatus.NEUTRAL;
+  isMobile = signal(false);
 
   // Make type guards available to template
   isPlayer = isPlayer;
@@ -35,6 +37,7 @@ export class RankingsComponent {
   ContenderStatus = ContenderStatus;
 
   constructor(private playerService: PlayerService) {
+    this.checkScreenSize();
     this.playerService.playerData$
       .pipe(takeUntilDestroyed())
       .subscribe((apiAssets: Asset[]) => {
@@ -42,6 +45,15 @@ export class RankingsComponent {
         this.sortAssets();
         this.loading.set(false);
       });
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize() {
+    this.isMobile.set(window.innerWidth <= 768);
   }
 
   private getAssetValue(asset: Asset, mode: ContenderStatus): number {
@@ -62,17 +74,18 @@ export class RankingsComponent {
   }
 
   sortAssets() {
-    this.assets = [...this.allAssets].sort((a, b) => {
+    const sortedAssets = [...this.allAssets].sort((a, b) => {
       // Sort by value depending on type and mode
       const mode = this.mode();
       const valueA = this.getAssetValue(a, mode);
       const valueB = this.getAssetValue(b, mode);
       return valueB - valueA; // Sort descending (highest value first)
     });
-    // If already on page 0, force update by setting to -1 then 0
-    let currentPage = this.page();
-    this.page.set(-1);
-    setTimeout(() => this.page.set(currentPage), 0);
+    
+    this.assets.set(sortedAssets);
+    
+    // Reset page to 0 when sorting to show first page
+    this.page.set(0);
   }
 
   onModeChange(mode: ContenderStatus) {
@@ -82,8 +95,24 @@ export class RankingsComponent {
   }
 
   pagedAssets = computed(() => {
-    const start = this.page() * this.pageSize;
-    const pageAssets = this.assets.slice(start, start + this.pageSize);
+    const isMobileView = this.isMobile();
+    const assetsArray = this.assets();
+    const currentPage = this.page();
+    
+    if (isMobileView) {
+      // Mobile: simple pagination with 5 items per page, sequential order
+      const start = currentPage * this.mobilePageSize;
+      const pageAssets = assetsArray.slice(start, start + this.mobilePageSize);
+      
+      return pageAssets.map((asset, index) => ({
+        asset,
+        rank: start + index + 1
+      }));
+    }
+    
+    // Desktop: use pagination and column ordering
+    const start = currentPage * this.desktopPageSize;
+    const pageAssets = assetsArray.slice(start, start + this.desktopPageSize);
     
     // Create array with assets and their original ranks
     const assetsWithRanks = pageAssets.map((asset, index) => ({
@@ -91,26 +120,31 @@ export class RankingsComponent {
       rank: start + index + 1
     }));
     
-    // Reorganize to fill columns vertically (column-first order) for 2 columns
+    // Reorganize to fill columns vertically (1-5 in first column, 6-10 in second)
     const columns = 2;
     const itemsPerColumn = Math.ceil(assetsWithRanks.length / columns);
     const reorderedAssets: {asset: Asset, rank: number}[] = [];
     
-    // Fill each column completely before moving to the next
-    for (let row = 0; row < itemsPerColumn; row++) {
-      for (let col = 0; col < columns; col++) {
-        const originalIndex = col * itemsPerColumn + row;
-        if (originalIndex < assetsWithRanks.length) {
-          reorderedAssets.push(assetsWithRanks[originalIndex]);
-        }
+    // Fill first column with ranks 1-5, second column with ranks 6-10
+    for (let i = 0; i < assetsWithRanks.length; i++) {
+      if (i < itemsPerColumn) {
+        // First column (items 0-4 become ranks 1-5)
+        reorderedAssets[i * 2] = assetsWithRanks[i];
+      } else {
+        // Second column (items 5-9 become ranks 6-10)
+        const secondColumnIndex = (i - itemsPerColumn) * 2 + 1;
+        reorderedAssets[secondColumnIndex] = assetsWithRanks[i];
       }
     }
     
-    return reorderedAssets;
+    // Filter out undefined entries and return
+    return reorderedAssets.filter(item => item !== undefined);
   });
 
   get totalPages() {
-    return Math.ceil(this.assets.length / this.pageSize);
+    const isMobileView = this.isMobile();
+    const pageSize = isMobileView ? this.mobilePageSize : this.desktopPageSize;
+    return Math.ceil(this.assets().length / pageSize);
   }
 
   nextPage() {

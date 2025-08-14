@@ -1,8 +1,14 @@
-<mat-toolbar class="navbar mat-elevation-z1">
-  <mat-toolbar-row>
+<div class="navbar-container">
+  <mat-toolbar class="navbar mat-elevation-z1">
     <span class="navbar-title">Dynasty Basketball Trader</span>
     
-    <nav class="navbar-nav">
+    <!-- Hamburger menu button (mobile only) -->
+    <button mat-icon-button class="mobile-menu-toggle" (click)="toggleMenu()">
+      <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+    </button>
+    
+    <!-- Desktop navigation (unchanged) -->
+    <nav class="navbar-nav desktop-nav">
       <a mat-button routerLink="/home" routerLinkActive="active">
         <mat-icon>home</mat-icon>
         Home
@@ -18,8 +24,10 @@
     </nav>
     
     <span class="spacer"></span>
+    
+    <!-- Desktop scoring toggle (unchanged) -->
     <mat-button-toggle-group
-      class="navbar-scoring-toggle"
+      class="navbar-scoring-toggle desktop-scoring"
       [value]="scoringService.scoring$ | async"
       (change)="onScoringChange($event.value)"
       appearance="legacy"
@@ -29,5 +37,39 @@
         {{ option | titlecase }}
       </mat-button-toggle>
     </mat-button-toggle-group>
-  </mat-toolbar-row>
-</mat-toolbar>
+  </mat-toolbar>
+  
+  <!-- Mobile navigation menu -->
+  <div class="mobile-menu" [class.open]="isMenuOpen">
+    <nav class="mobile-nav">
+      <a mat-button routerLink="/home" routerLinkActive="active" (click)="closeMenu()">
+        <mat-icon>home</mat-icon>
+        Home
+      </a>
+      <a mat-button routerLink="/trade" routerLinkActive="active" (click)="closeMenu()">
+        <mat-icon>swap_horiz</mat-icon>
+        Trades
+      </a>
+      <a mat-button routerLink="/rankings" routerLinkActive="active" (click)="closeMenu()">
+        <mat-icon>leaderboard</mat-icon>
+        Rankings
+      </a>
+    </nav>
+    
+    <!-- Mobile scoring toggle -->
+    <div class="mobile-scoring-section">
+      <span class="mobile-scoring-label">Scoring System:</span>
+      <mat-button-toggle-group
+        class="navbar-scoring-toggle mobile-scoring"
+        [value]="scoringService.scoring$ | async"
+        (change)="onScoringChange($event.value)"
+        appearance="legacy"
+        exclusive
+      >
+        <mat-button-toggle *ngFor="let option of scoringOptions" [value]="option">
+          {{ option | titlecase }}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+  </div>
+</div>

@@ -23,3 +23,16 @@ main {
   min-width: 0;
 }
 
+/* Mobile responsive - reduce padding for mobile */
+@media (max-width: 768px) {
+  main {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 0.25rem;
+  }
+}
+

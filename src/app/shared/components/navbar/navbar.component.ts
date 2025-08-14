@@ -17,8 +17,19 @@ import { ScoringService } from '../../../services/scoring.service';
 })
 export class NavbarComponent {
   scoringOptions = ['sleeper', 'espn'];
+  isMenuOpen = false;
+
   constructor(public scoringService: ScoringService) {}
+  
   onScoringChange(scoring: string) {
     this.scoringService.setScoring(scoring as 'sleeper' | 'espn');
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  closeMenu() {
+    this.isMenuOpen = false;
   }
 }

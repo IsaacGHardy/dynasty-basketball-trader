@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ScoringService } from '../../../services/scoring.service';
 import { PlayerService, isPlayer, isPick } from '../../../services/player.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,7 +14,8 @@ import { ContenderStatus } from '../../../models/contender-status';
   standalone: true,
   imports: [CommonModule, TeamTradeComponent, TradeEvaluationComponent],
   styleUrls: ['./trade.component.css'],
-  templateUrl: './trade.component.html'
+  templateUrl: './trade.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class TradeComponent {
@@ -32,13 +33,12 @@ export class TradeComponent {
     private scoringService: ScoringService,
     private playerService: PlayerService
   ) {
-    this.scoringService.scoring$
+    // Use the cached playerData$ stream instead of making new API calls
+    this.playerService.playerData$
       .pipe(takeUntilDestroyed())
-      .subscribe(scoring => {
-        this.playerService.getPlayers(scoring).subscribe((players: Asset[]) => {
-          this.updateTeamPlayers(this.team1Assets, players);
-          this.updateTeamPlayers(this.team2Assets, players);
-        });
+      .subscribe(players => {
+        this.updateTeamPlayers(this.team1Assets, players);
+        this.updateTeamPlayers(this.team2Assets, players);
       });
   }
 

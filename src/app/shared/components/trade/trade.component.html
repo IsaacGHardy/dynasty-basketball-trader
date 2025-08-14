@@ -9,6 +9,16 @@
       (modeChanged)="onTeam1ModeChanged($event)">
     </app-team-trade>
     
+    <!-- Evaluation bar - positioned between teams on mobile via CSS -->
+    <div class="evaluation-container">
+      <app-trade-evaluation 
+        [team1Assets]="team1Assets" 
+        [team2Assets]="team2Assets" 
+        [team1Mode]="team1Mode" 
+        [team2Mode]="team2Mode">
+      </app-trade-evaluation>
+    </div>
+    
     <app-team-trade
       teamName="Team 2"
       [assets]="team2Assets"
@@ -17,14 +27,5 @@
       (assetRemoved)="onTeam2AssetRemoved($event)"
       (modeChanged)="onTeam2ModeChanged($event)">
     </app-team-trade>
-  </div>
-  
-  <div class="evaluation-container">
-    <app-trade-evaluation 
-      [team1Assets]="team1Assets" 
-      [team2Assets]="team2Assets" 
-      [team1Mode]="team1Mode" 
-      [team2Mode]="team2Mode">
-    </app-trade-evaluation>
   </div>
 </div>
