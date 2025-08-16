@@ -1,14 +1,7 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  {
-    path: 'home',
-    loadComponent: () =>
-      import('./shared/components/home/home.component').then(
-        (m) => m.HomeComponent
-      ),
-  },
+  { path: '', redirectTo: '/trade', pathMatch: 'full' },
   {
     path: 'trade',
     loadComponent: () =>
@@ -21,6 +14,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./shared/components/rankings/rankings.component').then(
         (m) => m.RankingsComponent
+      ),
+  },
+  {
+    path: 'guide',
+    loadComponent: () =>
+      import('./shared/components/guide/guide.component').then(
+        (m) => m.GuideComponent
       ),
   },
 ];

@@ -9,10 +9,6 @@
     
     <!-- Desktop navigation (unchanged) -->
     <nav class="navbar-nav desktop-nav">
-      <a mat-button routerLink="/home" routerLinkActive="active">
-        <mat-icon>home</mat-icon>
-        Home
-      </a>
       <a mat-button routerLink="/trade" routerLinkActive="active">
         <mat-icon>swap_horiz</mat-icon>
         Trades
@@ -20,6 +16,10 @@
       <a mat-button routerLink="/rankings" routerLinkActive="active">
         <mat-icon>leaderboard</mat-icon>
         Rankings
+      </a>
+      <a mat-button routerLink="/guide" routerLinkActive="active">
+        <mat-icon>construction</mat-icon>
+        Guide
       </a>
     </nav>
     
@@ -42,10 +42,6 @@
   <!-- Mobile navigation menu -->
   <div class="mobile-menu" [class.open]="isMenuOpen">
     <nav class="mobile-nav">
-      <a mat-button routerLink="/home" routerLinkActive="active" (click)="closeMenu()">
-        <mat-icon>home</mat-icon>
-        Home
-      </a>
       <a mat-button routerLink="/trade" routerLinkActive="active" (click)="closeMenu()">
         <mat-icon>swap_horiz</mat-icon>
         Trades
@@ -53,6 +49,10 @@
       <a mat-button routerLink="/rankings" routerLinkActive="active" (click)="closeMenu()">
         <mat-icon>leaderboard</mat-icon>
         Rankings
+      </a>
+      <a mat-button routerLink="/guide" routerLinkActive="active" (click)="closeMenu()">
+        <mat-icon>construction</mat-icon>
+        Guide
       </a>
     </nav>
     

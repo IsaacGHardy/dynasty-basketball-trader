@@ -1,0 +1,63 @@
+<div class="guide-container">
+  <div class="guide-header">
+    <h1>Dynasty Basketball Trader Guide</h1>
+    <p class="guide-subtitle">Understanding player valuations and trade analysis</p>
+  </div>
+
+  <!-- Table of Contents -->
+  <nav class="table-of-contents">
+    <h2>Contents</h2>
+    <ul>
+      <li *ngFor="let section of guideSections">
+        <a (click)="scrollToSection(section.id)" class="toc-link">
+          {{ section.title }}
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Guide Sections -->
+  <div class="guide-content">
+    <section 
+      *ngFor="let section of guideSections" 
+      [id]="section.id" 
+      class="guide-section">
+      
+      <h2 class="section-title">{{ section.title }}</h2>
+      
+      <div *ngFor="let item of section.content" class="content-item">
+        <!-- Regular text -->
+        <p *ngIf="item.type === 'text'" 
+           [class.highlight-text]="item.highlight">
+          {{ item.content }}
+        </p>
+
+        <!-- Lists -->
+        <div *ngIf="item.type === 'list'" class="list-container">
+          <h3 class="list-title">{{ item.content }}</h3>
+          <ul class="guide-list">
+            <li *ngFor="let listItem of item.items">{{ listItem }}</li>
+          </ul>
+        </div>
+
+        <!-- Examples -->
+        <div *ngIf="item.type === 'example'" class="example-box">
+          <div class="example-label">Example:</div>
+          <div class="example-content">{{ item.content }}</div>
+        </div>
+
+        <!-- Notes -->
+        <div *ngIf="item.type === 'note'" 
+             class="note-box"
+             [class.highlight-note]="item.highlight">
+          <div class="note-content">{{ item.content }}</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Back to top -->
+  <button class="back-to-top" (click)="scrollToTop()">
+    ↑ Back to Top
+  </button>
+</div>

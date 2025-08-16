@@ -93,8 +93,8 @@ private getDiminishingFactor(tier: AssetTier, index: number): number {
   }
 
   private categorizeAssetsByTier(assetValues: number[], bestAsset: number) {
-    const highValueThreshold = bestAsset * 0.9;   // 90%+ of best asset = high value
-    const midValueThreshold = bestAsset * 0.7;    // 70-90% of best asset = mid value
+    const highValueThreshold = bestAsset * 0.85;   // 85%+ of best asset = high value
+    const midValueThreshold = bestAsset * 0.65;    // 65-85% of best asset = mid value
 
     const highValue = assetValues.filter(v => v >= highValueThreshold);
     const midValue = assetValues.filter(v => v >= midValueThreshold && v < highValueThreshold);

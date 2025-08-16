@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ScoringService } from '../../../services/scoring.service';
 import { PlayerService, isPlayer, isPick } from '../../../services/player.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -25,37 +25,50 @@ export class TradeComponent {
   team1Mode: ContenderStatus = ContenderStatus.NEUTRAL;
   team2Mode: ContenderStatus = ContenderStatus.NEUTRAL;
 
+  // Store asset IDs for efficient lookups
+  private team1AssetIds: (string | number)[] = [];
+  private team2AssetIds: (string | number)[] = [];
+  private allAssets: Asset[] = [];
+
   // Make type guards available to template
   isPlayer = isPlayer;
   isPick = isPick;
 
   constructor(
     private scoringService: ScoringService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private cdr: ChangeDetectorRef
   ) {
-    // Use the cached playerData$ stream instead of making new API calls
+    // Subscribe to player data updates
     this.playerService.playerData$
       .pipe(takeUntilDestroyed())
       .subscribe(players => {
-        this.updateTeamPlayers(this.team1Assets, players);
-        this.updateTeamPlayers(this.team2Assets, players);
+        this.allAssets = players;
+        this.updateTeamAssets();
+        this.cdr.markForCheck();
       });
   }
 
-  private updateTeamPlayers(team: Asset[], latestPlayers: Asset[]) {
-    for (let i = 0; i < team.length; i++) {
-      const updated = latestPlayers.find(p => p.id === team[i].id);
-      if (updated) {
-        team[i] = { ...updated };
-      }
-    }
+  private updateTeamAssets() {
+    // Efficiently update team assets using Map for O(1) lookups
+    const assetMap = new Map(this.allAssets.map(asset => [asset.id, asset]));
+    
+    this.team1Assets = this.team1AssetIds
+      .map(id => assetMap.get(id))
+      .filter(Boolean) as Asset[];
+      
+    this.team2Assets = this.team2AssetIds
+      .map(id => assetMap.get(id))
+      .filter(Boolean) as Asset[];
   }
 
   onTeam1AssetAdded(asset: Asset) {
+    this.team1AssetIds.push(asset.id);
     this.team1Assets.push(asset);
   }
 
   onTeam1AssetRemoved(index: number) {
+    this.team1AssetIds.splice(index, 1);
     this.team1Assets.splice(index, 1);
   }
 
@@ -64,10 +77,12 @@ export class TradeComponent {
   }
 
   onTeam2AssetAdded(asset: Asset) {
+    this.team2AssetIds.push(asset.id);
     this.team2Assets.push(asset);
   }
 
   onTeam2AssetRemoved(index: number) {
+    this.team2AssetIds.splice(index, 1);
     this.team2Assets.splice(index, 1);
   }
 

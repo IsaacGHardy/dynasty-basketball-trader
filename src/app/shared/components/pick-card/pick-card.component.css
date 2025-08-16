@@ -9,6 +9,7 @@
   border: 1px solid #ff9800;
   min-height: 48px;
   transition: box-shadow 0.2s ease;
+
   overflow: hidden;
   cursor: default;
 }
@@ -48,17 +49,14 @@
   font-weight: 700;
   color: #ff9800;
   justify-self: center;
-  padding-right: 35px;
+  padding-right: 37px;
   letter-spacing: 0.5px;
   cursor: default;
 }
 
-.spacer {
-  width: 24px; /* Approximate width of expansion panel arrow */
-  height: 24px;
-}
 
 .pick-rank {
+  margin-left: 8px;
   font-size: 1.3rem;
   font-weight: 700;
   color: #ff9800;
@@ -66,12 +64,12 @@
   width: 2.5rem;
   display: flex;
   align-items: center;
-  justify-content: right;
+  justify-content: left;
   cursor: default;
 }
 
 .remove-btn {
-  margin-left: 16px;
+  margin-left: 6px;
   color: #ff9800;
   background: transparent;
   border: none;
@@ -119,7 +117,7 @@ mat-icon:hover,
   .pick-value {
     font-size: 1.5rem;
     font-weight: 700;
-    padding-right: 25px;
+    padding-right: 32px;
   }
   
   .pick-rank {
@@ -128,7 +126,7 @@ mat-icon:hover,
   }
   
   .remove-btn {
-    margin-left: 12px;
+    margin-left: 5px;
     font-size: 1.1rem;
   }
 }
@@ -146,7 +144,7 @@ mat-icon:hover,
   
   .header-content {
     gap: 0.3rem;
-    min-height: 40px;
+    min-height: 47px;
     border-radius: 8px;
     padding: 0.3rem 0;
   }
@@ -158,16 +156,17 @@ mat-icon:hover,
   
   .pick-value {
     font-size: 1.3rem;
-    padding-right: 20px;
+    padding-right: 22px;
   }
   
   .pick-rank {
+    margin-left: 13px;
     font-size: 1rem;
     width: 1.8rem;
   }
   
   .remove-btn {
-    margin-left: 8px;
+    margin-left: 14px;
     font-size: 1rem;
   }
 }

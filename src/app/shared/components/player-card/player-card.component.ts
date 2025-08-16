@@ -25,7 +25,7 @@ export class PlayerCardComponent {
 
   getFgPercent(player: Player | null): string {
     if (player && player.fgm != null && player.fga != null && player.fga !== 0) {
-      return (player.fgm / player.fga).toFixed(3);
+      return ((player.fgm / player.fga) * 100).toFixed(1);
     }
     return 'N/A';
   }
