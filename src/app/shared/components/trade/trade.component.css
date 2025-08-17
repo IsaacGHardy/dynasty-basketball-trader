@@ -65,6 +65,7 @@
   .teams-container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 0.75rem;
   }
   
@@ -95,6 +96,7 @@
   
   .teams-container {
     gap: 0.5rem;
+    align-items: center;
   }
 }
 
