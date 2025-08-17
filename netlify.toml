@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "npm install && npx ng build --configuration production"
   publish = "dist/dynasty-basketball-trader/browser"
 
 [build.environment]
