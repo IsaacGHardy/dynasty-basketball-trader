@@ -1,6 +1,10 @@
 {
   "name": "dynasty-basketball-trader",
   "version": "0.0.0",
+  "author": "Isaac Hardy",
+  "license": "UNLICENSED",
+  "private": true,
+  "description": "Dynasty Basketball Player Valuation and Trade Analysis Tool",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -18,7 +22,6 @@
       }
     ]
   },
-  "private": true,
   "dependencies": {
     "@angular/cdk": "^20.0.5",
     "@angular/common": "^20.0.0",

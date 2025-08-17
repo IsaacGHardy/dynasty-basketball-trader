@@ -19,8 +19,22 @@ export const routes: Routes = [
   {
     path: 'guide',
     loadComponent: () =>
-      import('./shared/components/guide/guide.component').then(
+      import('./core/guide/guide.component').then(
         (m) => m.GuideComponent
+      ),
+  },
+  {
+    path: 'privacy-policy',
+    loadComponent: () =>
+      import('./core/privacy-policy/privacy-policy.component').then(
+        (m) => m.PrivacyPolicyComponent
+      ),
+  },
+  {
+    path: 'terms-of-service',
+    loadComponent: () =>
+      import('./core/terms-of-service/terms-of-service.component').then(
+        (m) => m.TermsOfServiceComponent
       ),
   },
 ];

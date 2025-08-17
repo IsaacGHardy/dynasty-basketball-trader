@@ -1,3 +1,12 @@
+/*
+ * Dynasty Basketball Trader - Guide Component
+ * Copyright (c) 2025 Isaac Hardy
+ * All rights reserved.
+ * 
+ * This software is proprietary and confidential.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ */
+
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GUIDE_CONTENT, GuideSection, GuideItem } from './guide-content';

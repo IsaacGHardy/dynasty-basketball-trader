@@ -1,3 +1,12 @@
+/*
+ * Dynasty Basketball Trader - Scoring Service
+ * Copyright (c) 2025 Isaac Hardy
+ * All rights reserved.
+ * 
+ * This software is proprietary and confidential.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ */
+
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 

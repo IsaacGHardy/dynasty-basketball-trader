@@ -1,4 +1,13 @@
 
+/*
+ * Dynasty Basketball Trader - Player Service
+ * Copyright (c) 2025 Isaac Hardy
+ * All rights reserved.
+ * 
+ * This software is proprietary and confidential.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ */
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -8,7 +17,7 @@ import { Asset } from '../models/asset';
 
 @Injectable({ providedIn: 'root' })
 export class PlayerService {
-  private baseUrl = 'http://127.0.0.1:8000/players';
+  private baseUrl = 'https://nba-fantasy-api-production.up.railway.app/players';
 
   playerData$: Observable<Asset[]>;
 

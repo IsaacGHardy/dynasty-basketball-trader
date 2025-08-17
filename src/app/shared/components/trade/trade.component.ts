@@ -1,3 +1,12 @@
+/*
+ * Dynasty Basketball Trader - Trade Component
+ * Copyright (c) 2025 Isaac Hardy
+ * All rights reserved.
+ * 
+ * This software is proprietary and confidential.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ */
+
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ScoringService } from '../../../services/scoring.service';
 import { PlayerService, isPlayer, isPick } from '../../../services/player.service';
